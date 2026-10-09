@@ -1,0 +1,4 @@
+John Doe
+Software Engineer
+Skills: JavaScript, React, Node.js, Express, PostgreSQL, Git, Docker, REST APIs
+Experience building scalable web applications and RESTful microservices.
