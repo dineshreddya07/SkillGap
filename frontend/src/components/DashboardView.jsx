@@ -22,33 +22,33 @@ export default function DashboardView({
   // Empty Dashboard State
   if (!currentAnalysis) {
     return (
-      <div className="space-y-8 max-w-4xl mx-auto">
+      <div className="space-y-10 max-w-4xl mx-auto py-2">
         {/* Hero Header */}
-        <div className="text-center max-w-2xl mx-auto pt-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-3">
+        <div className="text-center max-w-2xl mx-auto pt-4">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-3 shadow-2xs">
             <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-            AI Career Skill Analyzer
+            AI Career Skill Intelligence
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-            Welcome to SkillGap
+            Intelligent Skill Gap Analysis
           </h1>
-          <p className="mt-2 text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Discover the exact technical skills required for your target jobs, evaluate your resume fit, and get an intelligent learning roadmap to close the gap.
+          <p className="mt-2.5 text-slate-600 text-xs sm:text-sm leading-relaxed">
+            Discover the exact technical skills required for your target jobs, evaluate your resume fit with deterministic precision, and receive an AI-guided learning roadmap.
           </p>
         </div>
 
         {/* Action Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 text-center shadow-2xs space-y-6 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100 shadow-2xs">
+        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 text-center shadow-card hover:shadow-card-hover transition-all duration-200 space-y-6 max-w-xl mx-auto">
+          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-50 to-indigo-100/70 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-200/60 shadow-2xs">
             <Briefcase className="w-8 h-8" />
           </div>
 
           <div className="space-y-1.5">
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900">
+            <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
               No analyses yet
             </h2>
             <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-              Upload your resume and analyze a job description to get your first SkillGap report.
+              Upload your resume and evaluate a target job description to get your first comprehensive skill match report.
             </p>
           </div>
 
@@ -56,7 +56,7 @@ export default function DashboardView({
             <button
               type="button"
               onClick={onNewAnalysis}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-sm"
             >
               <PlusCircle className="w-4 h-4" />
               Start Your First Analysis
@@ -64,7 +64,7 @@ export default function DashboardView({
             <button
               type="button"
               onClick={onViewHistory}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 transition-colors"
             >
               <History className="w-4 h-4" />
               View History
@@ -73,9 +73,9 @@ export default function DashboardView({
         </div>
 
         {/* Feature Highlights Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-100">
               ✓
             </div>
             <h3 className="font-bold text-xs sm:text-sm text-slate-900">Deterministic Matching</h3>
@@ -84,8 +84,8 @@ export default function DashboardView({
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
+            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100">
               ✨
             </div>
             <h3 className="font-bold text-xs sm:text-sm text-slate-900">AI Career Insights</h3>
@@ -94,8 +94,8 @@ export default function DashboardView({
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-2xs space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-xs">
+          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-xs border border-sky-100">
               🗺
             </div>
             <h3 className="font-bold text-xs sm:text-sm text-slate-900">Intelligent Roadmap</h3>
@@ -122,18 +122,18 @@ export default function DashboardView({
   return (
     <div className="space-y-8">
       {/* Dashboard Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
               Latest Analysis Dashboard
             </h1>
-            <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Active
+            <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
+              Active Analysis
             </span>
           </div>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Overview of your current resume evaluation against {currentAnalysis.jobTitle || 'the target job'}.
+            Overview of your current resume evaluation against <span className="font-semibold text-slate-700">{currentAnalysis.jobTitle || 'the target job'}</span>.
           </p>
         </div>
 
@@ -141,7 +141,7 @@ export default function DashboardView({
           <button
             type="button"
             onClick={onViewHistory}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-2xs"
           >
             <History className="w-3.5 h-3.5 text-slate-500" />
             History
@@ -149,7 +149,7 @@ export default function DashboardView({
           <button
             type="button"
             onClick={onNewAnalysis}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-sm"
           >
             <PlusCircle className="w-4 h-4" />
             + New Analysis

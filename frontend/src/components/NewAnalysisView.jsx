@@ -169,7 +169,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Step Title Header */}
       <div className="text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 mb-3">
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-3 shadow-2xs">
           <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
           Skill Gap Analysis Engine
         </div>
@@ -182,16 +182,16 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
       </div>
 
       {/* SECTION 1: RESUME UPLOAD */}
-      <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs p-6 sm:p-7">
+      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7">
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">
+          <div className="flex items-center gap-2.5">
+            <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center border border-indigo-100 shadow-2xs">
               1
             </span>
             <h2 className="text-base font-bold text-slate-900">Upload Candidate Resume</h2>
           </div>
           {uploadResult && (
-            <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200 flex items-center gap-1">
+            <span className="text-2xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5 shadow-2xs">
               <Check className="w-3.5 h-3.5" /> Resume Ready
             </span>
           )}
@@ -214,13 +214,13 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
             if (e.dataTransfer.files?.[0]) handleFileSelection(e.dataTransfer.files[0]);
           }}
           onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center cursor-pointer transition-all ${
+          className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all ${
             isDragging
               ? 'border-indigo-600 bg-indigo-50/50'
               : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50/60'
           }`}
         >
-          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100/60 shadow-2xs">
             {isUploading ? <Loader2 className="w-6 h-6 animate-spin" /> : <UploadCloud className="w-6 h-6" />}
           </div>
           <p className="text-sm font-semibold text-slate-900 mb-0.5">
@@ -231,7 +231,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
             type="button"
             disabled={isUploading}
             onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-            className="inline-flex items-center px-4 py-2 text-xs font-semibold rounded-lg text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors"
+            className="inline-flex items-center px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition-colors"
           >
             Choose Resume
           </button>
@@ -284,9 +284,9 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
       </section>
 
       {/* SECTION 2: JOB DESCRIPTION */}
-      <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs p-6 sm:p-7">
-        <div className="flex items-center gap-2 mb-4">
-          <span className="w-7 h-7 rounded-lg bg-indigo-100 text-indigo-700 font-bold text-xs flex items-center justify-center">
+      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7">
+        <div className="flex items-center gap-2.5 mb-4">
+          <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center border border-indigo-100 shadow-2xs">
             2
           </span>
           <div>
@@ -297,7 +297,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
 
         <form onSubmit={handleAnalyzeJob} className="space-y-4">
           <div>
-            <label htmlFor="jobTitle" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="jobTitle" className="block text-2xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
               Target Job Title
             </label>
             <input
@@ -306,12 +306,12 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
               placeholder="e.g. Java Software Developer"
-              className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors"
+              className="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors shadow-2xs"
             />
           </div>
 
           <div>
-            <label htmlFor="jobDesc" className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="jobDesc" className="block text-2xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
               Job Description
             </label>
             <textarea
@@ -320,7 +320,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste the job description here..."
-              className="w-full text-sm px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors"
+              className="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors shadow-2xs"
             />
           </div>
 
@@ -335,7 +335,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
             <button
               type="submit"
               disabled={isAnalyzingJob || !jobDescription.trim()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 shadow-sm transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition-colors disabled:opacity-50"
             >
               {isAnalyzingJob ? (
                 <>
@@ -361,7 +361,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
               {requiredSkills.map((skill) => (
                 <span
                   key={skill}
-                  className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-indigo-100 text-indigo-800 border border-indigo-200 shadow-2xs"
+                  className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-100/80 text-indigo-800 border border-indigo-200 shadow-2xs"
                 >
                   {skill}
                 </span>
@@ -378,7 +378,7 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
             type="button"
             onClick={handleCalculateMatch}
             disabled={isMatching}
-            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all"
+            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm hover:shadow-md transition-all"
           >
             {isMatching ? (
               <>
@@ -397,10 +397,10 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
 
       {/* SECTION 4: MATCH BREAKDOWN & AI GENERATE BUTTON */}
       {matchResult && (
-        <section className="bg-white rounded-2xl border border-slate-200 shadow-2xs p-6 sm:p-7 space-y-6">
+        <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7 space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
             <div>
-              <span className="text-xs font-bold text-indigo-600 uppercase tracking-wider">Analysis Summary</span>
+              <span className="text-2xs font-bold text-indigo-600 uppercase tracking-wider">Analysis Summary</span>
               <h2 className="text-lg font-bold text-slate-900 mt-0.5">Match for {matchResult.jobTitle}</h2>
               <p className="text-xs text-slate-500 mt-1">{matchResult.explanation}</p>
             </div>

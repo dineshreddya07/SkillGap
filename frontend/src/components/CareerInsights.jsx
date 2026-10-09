@@ -21,21 +21,21 @@ export default function CareerInsights({
   return (
     <div className="space-y-6">
       {/* 1. Summary Box with Source Badge */}
-      <div className="bg-gradient-to-br from-indigo-50/60 via-white to-violet-50/60 rounded-2xl border border-indigo-100 p-6 sm:p-7 shadow-2xs">
+      <div className="bg-gradient-to-br from-indigo-50/70 via-white to-violet-50/70 rounded-2xl border border-indigo-100/90 p-6 sm:p-7 shadow-card">
         <div className="flex items-start gap-3.5">
-          <div className="w-9 h-9 rounded-xl bg-indigo-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs mt-0.5">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs mt-0.5">
             <Bot className="w-5 h-5" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
               <h2 className="text-sm font-bold text-slate-900">Career Insights Summary</h2>
               {isAi ? (
-                <span className="inline-flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 border border-violet-200">
+                <span className="inline-flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 border border-violet-200/90 shadow-2xs">
                   <Sparkles className="w-3 h-3 text-violet-600" />
                   AI Generated
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-2xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+                <span className="inline-flex items-center gap-1 text-2xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200/90 shadow-2xs">
                   <Sliders className="w-3 h-3 text-slate-500" />
                   Standard Recommendations
                 </span>
@@ -50,9 +50,9 @@ export default function CareerInsights({
 
       {/* 2. Skill Priority Explanation */}
       {skillPriorities && skillPriorities.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-2xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-card space-y-4">
           <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-            <span className="w-7 h-7 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100">
+            <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100/80 shadow-2xs">
               <Layers className="w-4 h-4" />
             </span>
             <div>
@@ -65,12 +65,12 @@ export default function CareerInsights({
             {skillPriorities.map((item) => (
               <div
                 key={item.skill}
-                className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/60 flex flex-col justify-between space-y-2"
+                className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 transition-colors flex flex-col justify-between space-y-2.5 shadow-2xs"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-bold text-sm text-slate-900">{item.skill}</span>
                   <span
-                    className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${
+                    className={`text-2xs font-bold px-2 py-0.5 rounded-full border shadow-2xs ${
                       PRIORITY_STYLES[item.priority] || PRIORITY_STYLES.Medium
                     }`}
                   >
@@ -99,9 +99,9 @@ export default function CareerInsights({
 
       {/* 3. Actionable Recommendations & Practice Projects */}
       {recommendations && recommendations.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-2xs space-y-4">
+        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-card space-y-4">
           <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-            <span className="w-7 h-7 rounded-lg bg-violet-50 text-violet-700 flex items-center justify-center font-bold text-xs border border-violet-100">
+            <span className="w-8 h-8 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center font-bold text-xs border border-violet-100/80 shadow-2xs">
               <BookOpen className="w-4 h-4" />
             </span>
             <div>
@@ -114,13 +114,13 @@ export default function CareerInsights({
             {recommendations.map((rec) => (
               <div
                 key={rec.skill}
-                className="p-4 rounded-xl border border-slate-200/90 bg-slate-50/60 space-y-2.5"
+                className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 transition-colors space-y-2.5 shadow-2xs"
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-sm text-slate-900">{rec.skill}</span>
                   {rec.priority && (
                     <span
-                      className={`text-2xs font-bold px-2 py-0.5 rounded-full border ${
+                      className={`text-2xs font-bold px-2 py-0.5 rounded-full border shadow-2xs ${
                         PRIORITY_STYLES[rec.priority] || PRIORITY_STYLES.Medium
                       }`}
                     >
@@ -134,13 +134,13 @@ export default function CareerInsights({
                 </p>
 
                 {rec.practiceProject && (
-                  <div className="pt-2 border-t border-slate-200/80 flex items-start gap-2 text-xs text-indigo-950 bg-indigo-50/60 p-2.5 rounded-lg">
+                  <div className="pt-2 border-t border-slate-200/80 flex items-start gap-2.5 text-xs text-indigo-950 bg-indigo-50/60 p-3 rounded-lg border border-indigo-100/60">
                     <Code2 className="w-4 h-4 flex-shrink-0 text-indigo-600 mt-0.5" />
                     <div>
-                      <span className="font-semibold block text-indigo-900 text-2xs uppercase tracking-wider">
+                      <span className="font-bold block text-indigo-900 text-2xs uppercase tracking-wider">
                         Practice Project
                       </span>
-                      <span className="text-indigo-800 text-xs">{rec.practiceProject}</span>
+                      <span className="text-indigo-800 text-xs font-medium">{rec.practiceProject}</span>
                     </div>
                   </div>
                 )}
