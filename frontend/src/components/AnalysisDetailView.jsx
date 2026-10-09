@@ -110,13 +110,13 @@ export default function AnalysisDetailView({
   const recommendations = Array.isArray(data.recommendations) ? data.recommendations : [];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       {/* Top Navigation Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-lux-border">
         <button
           type="button"
           onClick={onBackToHistory}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-slate-700 bg-white hover:bg-slate-50 hover:text-indigo-600 border border-slate-200 rounded-xl transition-all shadow-2xs w-fit"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-lux-secondary bg-lux-surface hover:text-lux-text hover:bg-lux-bg border border-lux-border rounded-md transition-all shadow-2xs w-fit"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
           Back to History
@@ -125,10 +125,10 @@ export default function AnalysisDetailView({
         <button
           type="button"
           onClick={onNewAnalysis}
-          className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-sm w-fit"
+          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs w-fit"
         >
-          <PlusCircle className="w-4 h-4" />
-          + New Analysis
+          <PlusCircle className="w-3.5 h-3.5" />
+          New Analysis
         </button>
       </div>
 
@@ -144,31 +144,31 @@ export default function AnalysisDetailView({
 
       {/* Collapsible Job Description Context */}
       {data.jobDescription && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover transition-all duration-200">
+        <div className="bg-lux-surface rounded-card border border-lux-border p-4 shadow-card">
           <button
             type="button"
             onClick={() => setShowFullJobDesc(!showFullJobDesc)}
             className="w-full flex items-center justify-between text-left"
           >
             <div className="flex items-center gap-2.5">
-              <span className="w-8 h-8 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs border border-slate-200/80">
-                <Briefcase className="w-4 h-4" />
+              <span className="w-6 h-6 rounded-md bg-lux-bg text-lux-secondary flex items-center justify-center font-bold text-xs border border-lux-border">
+                <Briefcase className="w-3.5 h-3.5 text-lux-muted" />
               </span>
               <div>
-                <span className="text-xs font-bold uppercase tracking-wider text-slate-700 block">
+                <span className="text-xs font-semibold text-lux-text block">
                   Job Description Reference
                 </span>
-                <span className="text-2xs text-slate-400">Target role requirements and specifications</span>
+                <span className="text-2xs text-lux-muted">Specified role requirements</span>
               </div>
             </div>
-            <span className="text-2xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-100">
-              {showFullJobDesc ? 'Hide Details' : 'View Full Text'}
+            <span className="text-2xs font-medium text-lux-cobalt hover:underline flex items-center gap-1">
+              {showFullJobDesc ? 'Collapse' : 'Expand full text'}
               {showFullJobDesc ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             </span>
           </button>
 
           {showFullJobDesc && (
-            <div className="mt-3.5 pt-3.5 border-t border-slate-100 text-xs text-slate-600 leading-relaxed max-h-60 overflow-y-auto whitespace-pre-line bg-slate-50/80 p-4 rounded-xl border border-slate-200/60 font-mono text-2xs">
+            <div className="mt-3 pt-3 border-t border-lux-border-subtle text-xs text-lux-secondary leading-relaxed max-h-60 overflow-y-auto whitespace-pre-line bg-lux-bg p-3.5 rounded-md border border-lux-border font-mono text-2xs">
               {data.jobDescription}
             </div>
           )}
@@ -176,27 +176,36 @@ export default function AnalysisDetailView({
       )}
 
       {/* Skill Breakdown */}
-      <SkillList
-        matchingSkills={data.matchedSkills || data.matchingSkills || []}
-        missingSkills={data.missingSkills || []}
-        additionalSkills={data.additionalSkills || []}
-      />
+      <section className="space-y-2">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Skill Competencies</h2>
+        <SkillList
+          matchingSkills={data.matchedSkills || data.matchingSkills || []}
+          missingSkills={data.missingSkills || []}
+          additionalSkills={data.additionalSkills || []}
+        />
+      </section>
 
       {/* AI Career Insights */}
-      <CareerInsights
-        summary={roadmapObj.summary || `Analysis completed with ${data.matchScore}% overall skill match.`}
-        skillPriorities={skillPriorities}
-        recommendations={recommendations}
-        source={source}
-      />
+      <section className="space-y-2">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Career Guidance</h2>
+        <CareerInsights
+          summary={roadmapObj.summary || `Analysis completed with ${data.matchScore}% overall skill match.`}
+          skillPriorities={skillPriorities}
+          recommendations={recommendations}
+          source={source}
+        />
+      </section>
 
       {/* Learning Roadmap Timeline */}
-      <RoadmapTimeline
-        roadmap={{
-          message: roadmapMessage,
-          steps: roadmapSteps,
-        }}
-      />
+      <section className="space-y-2">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Recommended Roadmap</h2>
+        <RoadmapTimeline
+          roadmap={{
+            message: roadmapMessage,
+            steps: roadmapSteps,
+          }}
+        />
+      </section>
     </div>
   );
 }

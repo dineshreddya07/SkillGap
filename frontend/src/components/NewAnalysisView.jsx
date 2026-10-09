@@ -168,31 +168,34 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
       {/* Step Title Header */}
-      <div className="text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-3 shadow-2xs">
-          <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-          Skill Gap Analysis Engine
+      <div className="space-y-1">
+        <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-2xs font-semibold bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+          <Sparkles className="w-2.5 h-2.5 text-lux-cobalt" />
+          Evaluation Workflow
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
-          Create a New SkillGap Analysis
+        <h1 className="text-xl sm:text-2xl font-semibold tracking-tight text-lux-text">
+          New Skill Gap Evaluation
         </h1>
-        <p className="mt-1.5 text-slate-600 text-xs sm:text-sm">
-          Upload your resume, add the job description, and get instant skill match percentages with an AI-guided learning roadmap.
+        <p className="text-xs text-lux-secondary">
+          Upload candidate resume, provide role requirements, and run deterministic skill matching with AI-guided next steps.
         </p>
       </div>
 
       {/* SECTION 1: RESUME UPLOAD */}
-      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7">
-        <div className="flex items-center justify-between mb-4">
+      <section className="bg-lux-surface rounded-card border border-lux-border p-5 sm:p-6 shadow-card space-y-4">
+        <div className="flex items-center justify-between pb-3 border-b border-lux-border-subtle">
           <div className="flex items-center gap-2.5">
-            <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center border border-indigo-100 shadow-2xs">
+            <span className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt font-bold text-xs flex items-center justify-center border border-lux-cobalt-border">
               1
             </span>
-            <h2 className="text-base font-bold text-slate-900">Upload Candidate Resume</h2>
+            <div>
+              <h2 className="text-xs font-semibold text-lux-text">Candidate Resume</h2>
+              <p className="text-2xs text-lux-muted">Supported formats: PDF, DOCX, TXT (Maximum 5MB)</p>
+            </div>
           </div>
           {uploadResult && (
-            <span className="text-2xs px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex items-center gap-1.5 shadow-2xs">
-              <Check className="w-3.5 h-3.5" /> Resume Ready
+            <span className="text-2xs px-2.5 py-0.5 rounded-full bg-lux-success-subtle text-lux-success font-semibold border border-lux-success-border flex items-center gap-1">
+              <Check className="w-3 h-3" /> Text Extracted
             </span>
           )}
         </div>
@@ -205,99 +208,110 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
           onChange={(e) => { if (e.target.files?.[0]) handleFileSelection(e.target.files[0]); }}
         />
 
-        <div
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
-          onDrop={(e) => {
-            e.preventDefault();
-            setIsDragging(false);
-            if (e.dataTransfer.files?.[0]) handleFileSelection(e.dataTransfer.files[0]);
-          }}
-          onClick={() => fileInputRef.current?.click()}
-          className={`border-2 border-dashed rounded-2xl p-6 sm:p-8 text-center cursor-pointer transition-all ${
-            isDragging
-              ? 'border-indigo-600 bg-indigo-50/50'
-              : 'border-slate-200 hover:border-indigo-400 hover:bg-slate-50/60'
-          }`}
-        >
-          <div className="w-12 h-12 mx-auto mb-3 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center border border-indigo-100/60 shadow-2xs">
-            {isUploading ? <Loader2 className="w-6 h-6 animate-spin" /> : <UploadCloud className="w-6 h-6" />}
-          </div>
-          <p className="text-sm font-semibold text-slate-900 mb-0.5">
-            {isUploading ? 'Extracting readable resume text...' : 'Click to upload or drag & drop resume'}
-          </p>
-          <p className="text-xs text-slate-500 mb-3">Supported formats: PDF, DOCX, TXT (Max 5MB)</p>
-          <button
-            type="button"
-            disabled={isUploading}
-            onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-            className="inline-flex items-center px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition-colors"
+        {!uploadResult ? (
+          <div
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+            onDrop={(e) => {
+              e.preventDefault();
+              setIsDragging(false);
+              if (e.dataTransfer.files?.[0]) handleFileSelection(e.dataTransfer.files[0]);
+            }}
+            onClick={() => fileInputRef.current?.click()}
+            className={`border border-dashed rounded-lg p-7 text-center cursor-pointer transition-all ${
+              isDragging
+                ? 'border-lux-cobalt bg-lux-cobalt-subtle/50'
+                : 'border-lux-border hover:border-lux-cobalt-border hover:bg-lux-bg'
+            }`}
           >
-            Choose Resume
-          </button>
-        </div>
+            <div className="w-10 h-10 mx-auto mb-2.5 rounded-lg bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center border border-lux-cobalt-border">
+              {isUploading ? <Loader2 className="w-5 h-5 animate-spin" /> : <UploadCloud className="w-5 h-5" />}
+            </div>
+            <p className="text-xs font-semibold text-lux-text mb-0.5">
+              {isUploading ? 'Extracting readable resume text...' : 'Click to select or drag & drop resume file'}
+            </p>
+            <p className="text-2xs text-lux-muted mb-3">PDF, DOCX, or TXT up to 5MB</p>
+            <button
+              type="button"
+              disabled={isUploading}
+              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+              className="inline-flex items-center px-3.5 py-1.5 text-xs font-medium rounded-md text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs"
+            >
+              Browse Local Files
+            </button>
+          </div>
+        ) : (
+          <div className="p-3.5 rounded-lg border border-lux-border bg-lux-bg flex items-center justify-between gap-3">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-9 h-9 rounded-md bg-lux-surface border border-lux-border flex items-center justify-center flex-shrink-0 text-lux-cobalt">
+                <FileText className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold text-lux-text truncate">{uploadResult.originalFilename}</p>
+                <p className="text-2xs text-lux-muted">
+                  {uploadResult.detectedFileType} &middot; <span className="tabular-nums">{uploadResult.textLength.toLocaleString()}</span> chars &middot; {resumeSkills.length} skills found
+                </p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="text-2xs font-medium text-lux-cobalt hover:underline flex-shrink-0"
+            >
+              Replace File
+            </button>
+          </div>
+        )}
 
         {error && (
-          <div className="mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3 text-sm">
-            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5 text-red-600" />
+          <div className="p-3 rounded-md bg-lux-error-subtle border border-lux-error-border text-lux-error flex items-start gap-2.5 text-xs">
+            <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-lux-error" />
             <div>
-              <p className="font-semibold text-xs sm:text-sm">Upload Error</p>
-              <p className="mt-0.5 text-red-600 text-xs">{error}</p>
+              <p className="font-semibold text-2xs uppercase tracking-wider">Upload Error</p>
+              <p className="text-xs">{error}</p>
             </div>
           </div>
         )}
 
         {uploadResult && (
-          <div className="mt-5 space-y-4">
-            <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between text-xs text-slate-600 gap-2">
-              <div>
-                <span className="font-semibold text-slate-800">{uploadResult.originalFilename}</span>
-                <span className="text-slate-400 mx-1.5">•</span>
-                <span>{uploadResult.detectedFileType}</span>
-                <span className="text-slate-400 mx-1.5">•</span>
-                <span>{uploadResult.textLength.toLocaleString()} characters</span>
+          <div className="space-y-2 pt-1">
+            <span className="text-2xs font-semibold uppercase tracking-wider text-lux-secondary block">
+              Extracted Resume Skills ({resumeSkills.length})
+            </span>
+            {resumeSkills.length > 0 ? (
+              <div className="flex flex-wrap gap-1.5 p-3 bg-lux-surface border border-lux-border rounded-lg">
+                {resumeSkills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium bg-lux-bg text-lux-text border border-lux-border"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-lux-success" />
+                    {skill}
+                  </span>
+                ))}
               </div>
-              <span className="text-emerald-700 font-semibold">Text parsed successfully</span>
-            </div>
-
-            <div>
-              <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block mb-2">
-                Detected Resume Skills ({resumeSkills.length})
-              </span>
-              {resumeSkills.length > 0 ? (
-                <div className="flex flex-wrap gap-2 p-3 bg-emerald-50/60 border border-emerald-100 rounded-xl">
-                  {resumeSkills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200 shadow-2xs"
-                    >
-                      ✓ {skill}
-                    </span>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs text-slate-400 italic">No technical skills detected in uploaded resume.</p>
-              )}
-            </div>
+            ) : (
+              <p className="text-2xs text-lux-muted italic">No standardized technical skills identified in file text.</p>
+            )}
           </div>
         )}
       </section>
 
       {/* SECTION 2: JOB DESCRIPTION */}
-      <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7">
-        <div className="flex items-center gap-2.5 mb-4">
-          <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 font-bold text-xs flex items-center justify-center border border-indigo-100 shadow-2xs">
+      <section className="bg-lux-surface rounded-card border border-lux-border p-5 sm:p-6 shadow-card space-y-4">
+        <div className="flex items-center gap-2.5 pb-3 border-b border-lux-border-subtle">
+          <span className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt font-bold text-xs flex items-center justify-center border border-lux-cobalt-border">
             2
           </span>
           <div>
-            <h2 className="text-base font-bold text-slate-900">Add Target Job Description</h2>
-            <p className="text-xs text-slate-500">Provide the requirements for the job you are targeting</p>
+            <h2 className="text-xs font-semibold text-lux-text">Target Job Specification</h2>
+            <p className="text-2xs text-lux-muted">Enter job title and description to extract role requirements</p>
           </div>
         </div>
 
-        <form onSubmit={handleAnalyzeJob} className="space-y-4">
+        <form onSubmit={handleAnalyzeJob} className="space-y-3.5">
           <div>
-            <label htmlFor="jobTitle" className="block text-2xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="jobTitle" className="block text-2xs font-semibold text-lux-secondary uppercase tracking-wider mb-1">
               Target Job Title
             </label>
             <input
@@ -305,13 +319,13 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
               type="text"
               value={jobTitle}
               onChange={(e) => setJobTitle(e.target.value)}
-              placeholder="e.g. Java Software Developer"
-              className="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors shadow-2xs"
+              placeholder="e.g. Senior Java Software Engineer"
+              className="w-full text-xs px-3 py-2 rounded-md border border-lux-border bg-lux-surface text-lux-text focus:outline-none focus:border-lux-cobalt transition-colors"
             />
           </div>
 
           <div>
-            <label htmlFor="jobDesc" className="block text-2xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
+            <label htmlFor="jobDesc" className="block text-2xs font-semibold text-lux-secondary uppercase tracking-wider mb-1">
               Job Description
             </label>
             <textarea
@@ -319,14 +333,14 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
               rows={4}
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
-              placeholder="Paste the job description here..."
-              className="w-full text-sm px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-600 transition-colors shadow-2xs"
+              placeholder="Paste the job description or technical requirements here..."
+              className="w-full text-xs px-3 py-2 rounded-md border border-lux-border bg-lux-surface text-lux-text focus:outline-none focus:border-lux-cobalt transition-colors leading-relaxed"
             />
           </div>
 
           {jobError && (
-            <div className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <div className="p-2.5 rounded-md bg-lux-error-subtle border border-lux-error-border text-lux-error text-2xs flex items-center gap-2">
+              <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
               <span>{jobError}</span>
             </div>
           )}
@@ -335,17 +349,17 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
             <button
               type="submit"
               disabled={isAnalyzingJob || !jobDescription.trim()}
-              className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm transition-colors disabled:opacity-50"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium rounded-md text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs disabled:opacity-50"
             >
               {isAnalyzingJob ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Analyzing Job...
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Extracting Requirements...
                 </>
               ) : (
                 <>
-                  <Briefcase className="w-4 h-4" />
-                  Extract Job Skills
+                  <Briefcase className="w-3.5 h-3.5" />
+                  Extract Role Requirements
                 </>
               )}
             </button>
@@ -353,15 +367,15 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
         </form>
 
         {requiredSkills && (
-          <div className="mt-5 border-t border-slate-100 pt-5">
-            <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block mb-2">
-              Extracted Job Requirements ({requiredSkills.length})
+          <div className="space-y-2 pt-2 border-t border-lux-border-subtle">
+            <span className="text-2xs font-semibold uppercase tracking-wider text-lux-secondary block">
+              Extracted Role Skills ({requiredSkills.length})
             </span>
-            <div className="flex flex-wrap gap-2 p-3 bg-indigo-50/60 border border-indigo-100 rounded-xl">
+            <div className="flex flex-wrap gap-1.5 p-3 bg-lux-bg border border-lux-border rounded-lg">
               {requiredSkills.map((skill) => (
                 <span
                   key={skill}
-                  className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-indigo-100/80 text-indigo-800 border border-indigo-200 shadow-2xs"
+                  className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-lux-surface text-lux-text border border-lux-border"
                 >
                   {skill}
                 </span>
@@ -373,22 +387,22 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
 
       {/* SECTION 3: MATCHING TRIGGER */}
       {requiredSkills && (
-        <div className="text-center pt-2">
+        <div className="text-center pt-1">
           <button
             type="button"
             onClick={handleCalculateMatch}
             disabled={isMatching}
-            className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-2xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 shadow-sm hover:shadow-md transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md text-xs font-semibold text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-all shadow-2xs disabled:opacity-50"
           >
             {isMatching ? (
               <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Calculating Skill Match...
+                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                Evaluating Competencies...
               </>
             ) : (
               <>
-                <Target className="w-4 h-4" />
-                Calculate Match Score
+                <Target className="w-3.5 h-3.5" />
+                Compute Match Score
               </>
             )}
           </button>
@@ -397,66 +411,57 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
 
       {/* SECTION 4: MATCH BREAKDOWN & AI GENERATE BUTTON */}
       {matchResult && (
-        <section className="bg-white rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 p-6 sm:p-7 space-y-6">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+        <section className="bg-lux-surface rounded-card border border-lux-border p-5 sm:p-6 shadow-card space-y-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-lux-border-subtle pb-4">
             <div>
-              <span className="text-2xs font-bold text-indigo-600 uppercase tracking-wider">Analysis Summary</span>
-              <h2 className="text-lg font-bold text-slate-900 mt-0.5">Match for {matchResult.jobTitle}</h2>
-              <p className="text-xs text-slate-500 mt-1">{matchResult.explanation}</p>
+              <span className="text-2xs font-semibold text-lux-cobalt uppercase tracking-wider">Evaluation Result</span>
+              <h2 className="text-sm font-semibold text-lux-text mt-0.5">{matchResult.jobTitle}</h2>
+              <p className="text-2xs text-lux-secondary mt-0.5">{matchResult.explanation}</p>
             </div>
 
-            <div className="flex items-center gap-3 bg-slate-50 p-3 rounded-2xl border border-slate-200">
-              <div
-                className={`w-14 h-14 rounded-full flex flex-col items-center justify-center font-extrabold text-base border-4 ${
-                  matchResult.matchScore >= 70
-                    ? 'border-emerald-500 text-emerald-700 bg-emerald-50'
-                    : matchResult.matchScore >= 40
-                    ? 'border-amber-500 text-amber-700 bg-amber-50'
-                    : 'border-rose-500 text-rose-700 bg-rose-50'
-                }`}
-              >
-                <span>{matchResult.matchScore}%</span>
-              </div>
-              <div>
-                <span className="text-2xs font-bold text-slate-700 block uppercase tracking-wider">Score</span>
-                <span className="text-xs font-semibold text-slate-600">
-                  {matchResult.totalMatched} of {matchResult.totalRequired} matched
+            <div className="flex items-center gap-3 bg-lux-bg px-3.5 py-2 rounded-lg border border-lux-border">
+              <div className="text-right">
+                <span className="tabular-nums text-lg font-bold text-lux-text block">
+                  {matchResult.matchScore}%
+                </span>
+                <span className="text-2xs text-lux-secondary">
+                  {matchResult.totalMatched} of {matchResult.totalRequired} required
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-emerald-900 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Matching Skills
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="p-3.5 rounded-lg bg-lux-bg border border-lux-border space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xs font-semibold uppercase tracking-wider text-lux-secondary flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-lux-success" /> Matching Competencies
                 </span>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-200 text-emerald-900">
+                <span className="tabular-nums text-2xs font-semibold px-2 py-0.2 rounded-full bg-lux-success-subtle text-lux-success border border-lux-success-border">
                   {matchResult.totalMatched}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {matchResult.matchedSkills.map((s) => (
-                  <span key={s} className="px-2 py-0.5 text-xs rounded-md font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  <span key={s} className="px-2 py-0.5 text-2xs rounded font-medium bg-lux-surface text-lux-text border border-lux-border">
                     ✓ {s}
                   </span>
                 ))}
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-50/50 border border-amber-200">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
-                  <XCircle className="w-4 h-4 text-amber-600" /> Missing Skills
+            <div className="p-3.5 rounded-lg bg-lux-bg border border-lux-border space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-2xs font-semibold uppercase tracking-wider text-lux-secondary flex items-center gap-1.5">
+                  <XCircle className="w-3.5 h-3.5 text-lux-warning" /> Skill Gaps
                 </span>
-                <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-200 text-amber-900">
+                <span className="tabular-nums text-2xs font-semibold px-2 py-0.2 rounded-full bg-lux-warning-subtle text-lux-warning border border-lux-warning-border">
                   {matchResult.totalMissing}
                 </span>
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-wrap gap-1">
                 {matchResult.missingSkills.map((s) => (
-                  <span key={s} className="px-2 py-0.5 text-xs rounded-md font-semibold bg-amber-100 text-amber-800 border border-amber-300">
+                  <span key={s} className="px-2 py-0.5 text-2xs rounded font-medium bg-lux-surface text-lux-text border border-lux-border">
                     ✗ {s}
                   </span>
                 ))}
@@ -465,28 +470,28 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
           </div>
 
           {/* Trigger Full Career Analysis & Save */}
-          <div className="border-t border-slate-100 pt-5 flex flex-col items-center gap-3">
+          <div className="border-t border-lux-border-subtle pt-4 flex flex-col items-center gap-2.5">
             <button
               type="button"
               onClick={handleSaveAndAnalyze}
               disabled={isSaving}
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 shadow-md hover:shadow-lg transition-all disabled:opacity-50"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-md text-xs font-semibold text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-all shadow-2xs disabled:opacity-50"
             >
               {isSaving ? (
                 <>
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Analyzing your skill gaps with AI...
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  Generating Career Insights &amp; Roadmap...
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-4 h-4 text-indigo-200" />
-                  Save &amp; Generate AI Career Guidance
+                  <Sparkles className="w-3.5 h-3.5" />
+                  Save &amp; Generate Career Roadmap
                 </>
               )}
             </button>
             {saveError && (
-              <p className="text-xs text-red-600 flex items-center gap-1">
-                <AlertCircle className="w-3.5 h-3.5" />
+              <p className="text-2xs text-lux-error flex items-center gap-1 font-medium">
+                <AlertCircle className="w-3 h-3" />
                 {saveError}
               </p>
             )}

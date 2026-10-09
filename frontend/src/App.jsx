@@ -89,39 +89,36 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
-      {/* ── Top Navigation Header ── */}
-      <header className="border-b border-slate-200/80 bg-white/95 backdrop-blur-md sticky top-0 z-40 shadow-xs">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-          {/* Logo & Brand */}
+    <div className="min-h-screen bg-lux-bg text-lux-text flex flex-col font-sans selection:bg-lux-cobalt-subtle selection:text-lux-cobalt">
+      {/* ── Top Navigation Bar: Linear / Stripe luxury standard ── */}
+      <header className="border-b border-lux-border bg-lux-surface/90 backdrop-blur-md sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+          {/* Brand Wordmark & Tag */}
           <div
             onClick={() => setActiveTab('dashboard')}
             className="flex items-center gap-3 cursor-pointer select-none group"
           >
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-600 to-violet-500 text-white flex items-center justify-center font-bold text-base shadow-sm ring-1 ring-indigo-500/20 group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-lux-cobalt text-white flex items-center justify-center font-bold text-xs tracking-tight shadow-2xs group-hover:bg-lux-cobalt-hover transition-colors">
               SG
             </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-base tracking-tight text-slate-900">SkillGap</span>
-                <span className="inline-flex items-center gap-1 text-2xs font-bold px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200/80">
-                  <Sparkles className="w-2.5 h-2.5 text-indigo-500" />
-                  AI-Powered
-                </span>
-              </div>
-              <p className="text-2xs text-slate-500 hidden sm:block font-medium">Career Intelligence &amp; Skill Gap Platform</p>
+            <div className="flex items-baseline gap-2">
+              <span className="font-semibold text-sm tracking-tight text-lux-text">SkillGap</span>
+              <span className="hidden sm:inline-flex items-center gap-1 text-2xs font-medium px-2 py-0.5 rounded-full bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+                <Sparkles className="w-2.5 h-2.5 text-lux-cobalt" />
+                Intelligence
+              </span>
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl border border-slate-200/70 shadow-2xs">
+          {/* Desktop Navigation Links — calm, confident segmented control */}
+          <nav className="hidden md:flex items-center gap-0.5 bg-lux-bg p-1 rounded-lg border border-lux-border shadow-2xs">
             <button
               type="button"
               onClick={() => setActiveTab('dashboard')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeTab === 'dashboard'
-                  ? 'bg-white text-indigo-700 shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                  ? 'bg-lux-surface text-lux-text shadow-2xs font-semibold'
+                  : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
               <LayoutDashboard className="w-3.5 h-3.5" />
@@ -131,10 +128,10 @@ export default function App() {
             <button
               type="button"
               onClick={() => setActiveTab('new')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeTab === 'new'
-                  ? 'bg-white text-indigo-700 shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                  ? 'bg-lux-surface text-lux-text shadow-2xs font-semibold'
+                  : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
               <PlusCircle className="w-3.5 h-3.5" />
@@ -144,41 +141,41 @@ export default function App() {
             <button
               type="button"
               onClick={() => setActiveTab('history')}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
                 activeTab === 'history' || activeTab === 'detail'
-                  ? 'bg-white text-indigo-700 shadow-xs font-bold'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/50'
+                  ? 'bg-lux-surface text-lux-text shadow-2xs font-semibold'
+                  : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
               <History className="w-3.5 h-3.5" />
               History
               {history.length > 0 && (
-                <span className="ml-1 px-1.5 py-0.2 rounded-full text-2xs bg-slate-200 text-slate-700 font-bold">
+                <span className="tabular-nums px-1.5 py-0.2 rounded-full text-2xs bg-lux-border text-lux-secondary font-medium">
                   {history.length}
                 </span>
               )}
             </button>
           </nav>
 
-          {/* System Health Badges & Mobile Menu Toggle */}
-          <div className="flex items-center gap-2.5">
-            <div className="hidden lg:flex items-center gap-2 text-xs text-slate-600 font-medium">
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-2xs text-slate-600">
+          {/* Right Actions: System Health & Mobile Toggle */}
+          <div className="flex items-center gap-3">
+            <div className="hidden lg:flex items-center gap-2 text-2xs font-medium text-lux-secondary">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-lux-surface border border-lux-border shadow-2xs">
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${
-                    health.backend === 'Connected' ? 'bg-emerald-500 ring-2 ring-emerald-100' : 'bg-amber-500'
+                    health.backend === 'Connected' ? 'bg-lux-success ring-2 ring-emerald-100' : 'bg-lux-warning'
                   }`}
                 />
-                <span className="font-semibold">API</span>
+                <span className="text-lux-secondary">API</span>
               </div>
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 border border-slate-200 text-2xs text-slate-600">
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-lux-surface border border-lux-border shadow-2xs">
                 <span
                   className={`w-1.5 h-1.5 rounded-full ${
-                    health.database === 'Connected' ? 'bg-emerald-500 ring-2 ring-emerald-100' : 'bg-amber-500'
+                    health.database === 'Connected' ? 'bg-lux-success ring-2 ring-emerald-100' : 'bg-lux-warning'
                   }`}
                 />
-                <Database className="w-3 h-3 text-slate-400" />
-                <span className="font-semibold">Neon DB</span>
+                <Database className="w-3 h-3 text-lux-muted" />
+                <span className="text-lux-secondary">Neon DB</span>
               </div>
             </div>
 
@@ -186,21 +183,22 @@ export default function App() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 border border-slate-200 transition-colors"
+              aria-label="Toggle navigation menu"
+              className="md:hidden p-1.5 rounded-md text-lux-secondary hover:text-lux-text hover:bg-lux-border-subtle border border-lux-border transition-colors"
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Dropdown Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white px-4 py-3 space-y-1.5 shadow-md">
+          <div className="md:hidden border-t border-lux-border bg-lux-surface px-4 py-3 space-y-1 shadow-dropdown">
             <button
               type="button"
               onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold ${
-                activeTab === 'dashboard' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600'
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium ${
+                activeTab === 'dashboard' ? 'bg-lux-cobalt-subtle text-lux-cobalt font-semibold' : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
               <LayoutDashboard className="w-4 h-4" />
@@ -209,8 +207,8 @@ export default function App() {
             <button
               type="button"
               onClick={() => { setActiveTab('new'); setMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold ${
-                activeTab === 'new' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600'
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-md text-xs font-medium ${
+                activeTab === 'new' ? 'bg-lux-cobalt-subtle text-lux-cobalt font-semibold' : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
               <PlusCircle className="w-4 h-4" />
@@ -219,24 +217,31 @@ export default function App() {
             <button
               type="button"
               onClick={() => { setActiveTab('history'); setMobileMenuOpen(false); }}
-              className={`w-full flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-bold ${
-                activeTab === 'history' || activeTab === 'detail' ? 'bg-indigo-50 text-indigo-700' : 'text-slate-600'
+              className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-xs font-medium ${
+                activeTab === 'history' || activeTab === 'detail' ? 'bg-lux-cobalt-subtle text-lux-cobalt font-semibold' : 'text-lux-secondary hover:text-lux-text'
               }`}
             >
-              <History className="w-4 h-4" />
-              History ({history.length})
+              <span className="flex items-center gap-2.5">
+                <History className="w-4 h-4" />
+                Analysis History
+              </span>
+              <span className="tabular-nums px-2 py-0.5 rounded-full text-2xs bg-lux-border text-lux-secondary">
+                {history.length}
+              </span>
             </button>
           </div>
         )}
       </header>
 
       {/* ── Main View Content Area ── */}
-      <main className="max-w-5xl mx-auto px-4 py-8 sm:py-10 flex-1 w-full">
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-10 flex-1 w-full">
         {activeTab === 'dashboard' && (
           <DashboardView
             currentAnalysis={currentAnalysis}
+            historyList={history}
             onNewAnalysis={() => setActiveTab('new')}
             onViewHistory={() => setActiveTab('history')}
+            onSelectAnalysis={handleSelectAnalysis}
           />
         )}
 
@@ -267,9 +272,15 @@ export default function App() {
       </main>
 
       {/* ── Footer ── */}
-      <footer className="border-t border-slate-200 bg-white py-6 text-center text-2xs text-slate-400">
-        <p>SkillGap Dashboard · AI-Powered Career Skill Analyzer</p>
-        <p className="mt-1">Built with React, Express, Prisma &amp; Neon PostgreSQL</p>
+      <footer className="border-t border-lux-border bg-lux-surface py-6 text-center text-2xs text-lux-secondary">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="font-medium text-lux-secondary">
+            SkillGap &middot; Precision Career &amp; Skill Gap Intelligence
+          </p>
+          <p className="text-lux-muted">
+            Powered by Deterministic Extraction, Postgres &amp; AI Guidance
+          </p>
+        </div>
       </footer>
     </div>
   );

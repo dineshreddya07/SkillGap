@@ -2,12 +2,12 @@ import React from 'react';
 import { Bot, Layers, BookOpen, Code2, Sparkles, Sliders } from 'lucide-react';
 
 const PRIORITY_STYLES = {
-  High: 'bg-red-50 text-red-700 border-red-200',
-  HIGH: 'bg-red-50 text-red-700 border-red-200',
-  Medium: 'bg-amber-50 text-amber-700 border-amber-200',
-  MEDIUM: 'bg-amber-50 text-amber-700 border-amber-200',
-  Low: 'bg-sky-50 text-sky-700 border-sky-200',
-  LOW: 'bg-sky-50 text-sky-700 border-sky-200',
+  High: 'bg-lux-error-subtle text-lux-error border-lux-error-border',
+  HIGH: 'bg-lux-error-subtle text-lux-error border-lux-error-border',
+  Medium: 'bg-lux-warning-subtle text-lux-warning border-lux-warning-border',
+  MEDIUM: 'bg-lux-warning-subtle text-lux-warning border-lux-warning-border',
+  Low: 'bg-lux-cobalt-subtle text-lux-cobalt border-lux-cobalt-border',
+  LOW: 'bg-lux-cobalt-subtle text-lux-cobalt border-lux-cobalt-border',
 };
 
 export default function CareerInsights({
@@ -19,30 +19,32 @@ export default function CareerInsights({
   const isAi = source === 'ai';
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* 1. Summary Box with Source Badge */}
-      <div className="bg-gradient-to-br from-indigo-50/70 via-white to-violet-50/70 rounded-2xl border border-indigo-100/90 p-6 sm:p-7 shadow-card">
-        <div className="flex items-start gap-3.5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-violet-600 text-white flex items-center justify-center flex-shrink-0 shadow-xs mt-0.5">
-            <Bot className="w-5 h-5" />
+      <div className="bg-lux-surface rounded-card border border-lux-border p-5 shadow-card">
+        <div className="flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center flex-shrink-0 border border-lux-cobalt-border mt-0.5">
+            <Bot className="w-4 h-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between flex-wrap gap-2 mb-2">
-              <h2 className="text-sm font-bold text-slate-900">Career Insights Summary</h2>
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-1.5">
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">
+                Career Assessment Summary
+              </h2>
               {isAi ? (
-                <span className="inline-flex items-center gap-1 text-2xs font-bold px-2.5 py-1 rounded-full bg-violet-100 text-violet-800 border border-violet-200/90 shadow-2xs">
-                  <Sparkles className="w-3 h-3 text-violet-600" />
-                  AI Generated
+                <span className="inline-flex items-center gap-1 text-2xs font-semibold px-2 py-0.5 rounded-full bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+                  <Sparkles className="w-2.5 h-2.5 text-lux-cobalt" />
+                  AI Guided
                 </span>
               ) : (
-                <span className="inline-flex items-center gap-1 text-2xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 border border-slate-200/90 shadow-2xs">
-                  <Sliders className="w-3 h-3 text-slate-500" />
-                  Standard Recommendations
+                <span className="inline-flex items-center gap-1 text-2xs font-medium px-2 py-0.5 rounded-full bg-lux-bg text-lux-secondary border border-lux-border">
+                  <Sliders className="w-2.5 h-2.5 text-lux-muted" />
+                  Standard Assessment
                 </span>
               )}
             </div>
-            <p className="text-xs sm:text-sm text-slate-700 leading-relaxed font-normal">
-              {summary || 'Review your matching skills and targeted recommendations to close your skill gap.'}
+            <p className="text-xs text-lux-text leading-relaxed font-normal">
+              {summary || 'Review your matched competencies and targeted skill recommendations to advance towards role readiness.'}
             </p>
           </div>
         </div>
@@ -50,43 +52,43 @@ export default function CareerInsights({
 
       {/* 2. Skill Priority Explanation */}
       {skillPriorities && skillPriorities.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-card space-y-4">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-            <span className="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100/80 shadow-2xs">
-              <Layers className="w-4 h-4" />
+        <div className="bg-lux-surface rounded-card border border-lux-border p-5 shadow-card space-y-3.5">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-lux-border-subtle">
+            <span className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center font-bold text-xs border border-lux-cobalt-border">
+              <Layers className="w-3.5 h-3.5" />
             </span>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Skill Priority Assessment</h3>
-              <p className="text-2xs text-slate-500">Why each missing skill is crucial for this job target</p>
+              <h3 className="text-xs font-semibold text-lux-text">Skill Priority Assessment</h3>
+              <p className="text-2xs text-lux-muted">Strategic importance of each missing requirement</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {skillPriorities.map((item) => (
               <div
                 key={item.skill}
-                className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 transition-colors flex flex-col justify-between space-y-2.5 shadow-2xs"
+                className="p-3.5 rounded-lg border border-lux-border bg-lux-bg hover:bg-lux-surface transition-colors flex flex-col justify-between space-y-2"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-bold text-sm text-slate-900">{item.skill}</span>
+                  <span className="font-semibold text-xs text-lux-text">{item.skill}</span>
                   <span
-                    className={`text-2xs font-bold px-2 py-0.5 rounded-full border shadow-2xs ${
+                    className={`text-2xs font-semibold px-2 py-0.5 rounded-full border ${
                       PRIORITY_STYLES[item.priority] || PRIORITY_STYLES.Medium
                     }`}
                   >
                     {item.priority} Priority
                   </span>
                 </div>
-                <div className="space-y-1 text-xs text-slate-600 leading-relaxed">
+                <div className="space-y-1 text-2xs text-lux-secondary leading-relaxed">
                   {item.reason && (
                     <p>
-                      <strong className="text-slate-800">Job relevance: </strong>
+                      <strong className="text-lux-text font-medium">Relevance: </strong>
                       {item.reason}
                     </p>
                   )}
                   {item.whyItMatters && (
                     <p>
-                      <strong className="text-slate-800">Impact: </strong>
+                      <strong className="text-lux-text font-medium">Impact: </strong>
                       {item.whyItMatters}
                     </p>
                   )}
@@ -99,28 +101,28 @@ export default function CareerInsights({
 
       {/* 3. Actionable Recommendations & Practice Projects */}
       {recommendations && recommendations.length > 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-card space-y-4">
-          <div className="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-            <span className="w-8 h-8 rounded-xl bg-violet-50 text-violet-700 flex items-center justify-center font-bold text-xs border border-violet-100/80 shadow-2xs">
-              <BookOpen className="w-4 h-4" />
+        <div className="bg-lux-surface rounded-card border border-lux-border p-5 shadow-card space-y-3.5">
+          <div className="flex items-center gap-2 pb-2.5 border-b border-lux-border-subtle">
+            <span className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center font-bold text-xs border border-lux-cobalt-border">
+              <BookOpen className="w-3.5 h-3.5" />
             </span>
             <div>
-              <h3 className="text-sm font-bold text-slate-900">Actionable Recommendations</h3>
-              <p className="text-2xs text-slate-500">Structured learning guidance and portfolio projects</p>
+              <h3 className="text-xs font-semibold text-lux-text">Actionable Recommendations</h3>
+              <p className="text-2xs text-lux-muted">Suggested learning strategies and practical portfolio evidence</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {recommendations.map((rec) => (
               <div
                 key={rec.skill}
-                className="p-4 rounded-xl border border-slate-200/80 bg-slate-50/70 hover:bg-slate-50 transition-colors space-y-2.5 shadow-2xs"
+                className="p-3.5 rounded-lg border border-lux-border bg-lux-bg hover:bg-lux-surface transition-colors space-y-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="font-bold text-sm text-slate-900">{rec.skill}</span>
+                  <span className="font-semibold text-xs text-lux-text">{rec.skill}</span>
                   {rec.priority && (
                     <span
-                      className={`text-2xs font-bold px-2 py-0.5 rounded-full border shadow-2xs ${
+                      className={`text-2xs font-semibold px-2 py-0.5 rounded-full border ${
                         PRIORITY_STYLES[rec.priority] || PRIORITY_STYLES.Medium
                       }`}
                     >
@@ -129,18 +131,18 @@ export default function CareerInsights({
                   )}
                 </div>
 
-                <p className="text-xs text-slate-600 leading-relaxed">
+                <p className="text-2xs text-lux-secondary leading-relaxed">
                   {rec.recommendation || rec.reason}
                 </p>
 
                 {rec.practiceProject && (
-                  <div className="pt-2 border-t border-slate-200/80 flex items-start gap-2.5 text-xs text-indigo-950 bg-indigo-50/60 p-3 rounded-lg border border-indigo-100/60">
-                    <Code2 className="w-4 h-4 flex-shrink-0 text-indigo-600 mt-0.5" />
+                  <div className="pt-2 border-t border-lux-border-subtle flex items-start gap-2 text-2xs text-lux-text bg-lux-surface p-2.5 rounded-md border border-lux-border">
+                    <Code2 className="w-3.5 h-3.5 flex-shrink-0 text-lux-cobalt mt-0.5" />
                     <div>
-                      <span className="font-bold block text-indigo-900 text-2xs uppercase tracking-wider">
+                      <span className="font-medium block text-lux-secondary text-2xs uppercase tracking-wider">
                         Practice Project
                       </span>
-                      <span className="text-indigo-800 text-xs font-medium">{rec.practiceProject}</span>
+                      <span className="text-lux-text font-normal">{rec.practiceProject}</span>
                     </div>
                   </div>
                 )}

@@ -22,25 +22,29 @@ export default function HistoryView({
   onNewAnalysis = () => {},
 }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-lux-border">
         <div>
-          <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900 flex items-center gap-2.5">
-            <History className="w-6 h-6 text-indigo-600" />
-            Analysis History
-          </h1>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Browse and review your past SkillGap analyses and track your matching progress.
+          <div className="flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-lux-text">
+              Analysis History
+            </h1>
+            <span className="tabular-nums text-2xs font-medium px-2 py-0.5 rounded-full bg-lux-bg text-lux-secondary border border-lux-border">
+              {history.length} saved
+            </span>
+          </div>
+          <p className="text-2xs text-lux-secondary mt-0.5">
+            Past evaluations and candidate skill matching records stored in Neon PostgreSQL.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onRefresh}
             disabled={isLoading}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-lux-border bg-lux-surface text-lux-secondary hover:text-lux-text hover:bg-lux-bg transition-colors shadow-2xs disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
             Refresh
@@ -48,143 +52,149 @@ export default function HistoryView({
           <button
             type="button"
             onClick={onNewAnalysis}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium rounded-md text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs"
           >
-            <PlusCircle className="w-4 h-4" />
-            + New Analysis
+            <PlusCircle className="w-3.5 h-3.5" />
+            New Analysis
           </button>
         </div>
       </div>
 
       {/* Error State */}
       {error && (
-        <div className="p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-start gap-3 text-sm">
-          <AlertCircle className="w-5 h-5 flex-shrink-0 text-red-600 mt-0.5" />
+        <div className="p-3 rounded-md bg-lux-error-subtle border border-lux-error-border text-lux-error flex items-start gap-2.5 text-xs">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 text-lux-error mt-0.5" />
           <div className="flex-1">
-            <p className="font-semibold text-xs sm:text-sm">Unable to load analysis history</p>
-            <p className="text-xs text-red-600 mt-0.5">{error}</p>
+            <p className="font-semibold text-2xs uppercase tracking-wider">Database Fetch Error</p>
+            <p className="text-2xs mt-0.5">{error}</p>
           </div>
           <button
             onClick={onRefresh}
-            className="text-xs font-bold underline hover:no-underline text-red-800"
+            className="text-2xs font-semibold underline hover:no-underline text-lux-error"
           >
-            Try Again
+            Retry
           </button>
         </div>
       )}
 
       {/* Loading State */}
       {isLoading && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-2xs space-y-3">
-          <Loader2 className="w-8 h-8 text-indigo-600 animate-spin mx-auto" />
-          <p className="text-sm font-semibold text-slate-700">Loading your analyses...</p>
-          <p className="text-xs text-slate-400">Fetching records from database</p>
+        <div className="bg-lux-surface rounded-card border border-lux-border p-10 text-center shadow-card space-y-2">
+          <Loader2 className="w-6 h-6 text-lux-cobalt animate-spin mx-auto" />
+          <p className="text-xs font-medium text-lux-text">Loading historical records...</p>
+          <p className="text-2xs text-lux-muted">Fetching evaluations from database</p>
         </div>
       )}
 
       {/* Empty State */}
       {!isLoading && !error && history.length === 0 && (
-        <div className="bg-white rounded-2xl border border-slate-200 p-10 sm:p-14 text-center shadow-2xs space-y-4 max-w-lg mx-auto">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-100">
-            <FileText className="w-7 h-7" />
+        <div className="bg-lux-surface rounded-panel border border-lux-border p-10 text-center shadow-card space-y-3.5 max-w-sm mx-auto">
+          <div className="w-10 h-10 rounded-lg bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center mx-auto border border-lux-cobalt-border">
+            <FileText className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-slate-900">No analyses yet.</h2>
-            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Upload your resume and analyze a job description to get your first SkillGap report.
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold text-lux-text">No evaluations on record</h2>
+            <p className="text-2xs text-lux-secondary leading-relaxed">
+              Upload a resume and evaluate against a job description to populate your history.
             </p>
           </div>
           <button
             type="button"
             onClick={onNewAnalysis}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-md text-xs font-medium text-white bg-lux-cobalt hover:bg-lux-cobalt-hover transition-colors shadow-2xs"
           >
-            <PlusCircle className="w-4 h-4" />
-            Start Your First Analysis
+            <PlusCircle className="w-3.5 h-3.5" />
+            Create First Evaluation
           </button>
         </div>
       )}
 
       {/* History Cards List */}
       {!isLoading && history.length > 0 && (
-        <div className="space-y-3.5">
-          {history.map((item) => {
-            const interpretation = getScoreInterpretation(item.matchScore);
-            const isAi = item.source === 'ai';
+        <div className="bg-lux-surface rounded-card border border-lux-border shadow-card overflow-hidden">
+          <div className="divide-y divide-lux-border-subtle">
+            {history.map((item) => {
+              const interpretation = getScoreInterpretation(item.matchScore);
+              const isAi = item.source === 'ai';
 
-            return (
-              <div
-                key={item.id}
-                className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover hover:border-indigo-200 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
-              >
-                {/* Left: Job Info */}
-                <div className="space-y-1.5 min-w-0 flex-1">
-                  <div className="flex items-center gap-2 flex-wrap">
-                    <h2 className="text-base font-bold text-slate-900 truncate tracking-tight">
-                      {item.jobTitle || 'Target Role'}
-                    </h2>
-                    {isAi ? (
-                      <span className="inline-flex items-center gap-1 text-2xs font-bold px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200/80 shadow-2xs">
-                        <Sparkles className="w-3 h-3 text-violet-600" />
-                        AI Generated
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-2xs font-medium px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 border border-slate-200/80 shadow-2xs">
-                        <Sliders className="w-3 h-3 text-slate-500" />
-                        Standard
-                      </span>
-                    )}
-                  </div>
-
-                  <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
-                    {item.resumeFileName && (
-                      <span className="flex items-center gap-1.5 truncate text-slate-600 font-medium">
-                        <FileText className="w-3.5 h-3.5 flex-shrink-0 text-slate-400" />
-                        <span className="truncate">{item.resumeFileName}</span>
-                      </span>
-                    )}
-                    <span>•</span>
-                    <span className="flex items-center gap-1.5 text-slate-500">
-                      <Clock className="w-3.5 h-3.5 text-slate-400" />
-                      {formatDate(item.createdAt)}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-1 text-2xs font-semibold">
-                    <span className="px-2.5 py-0.5 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200/80">
-                      ✓ {item.matchedCount} matched
-                    </span>
-                    <span className="px-2.5 py-0.5 rounded-lg bg-amber-50 text-amber-800 border border-amber-200/80">
-                      ✗ {item.missingCount} gaps
-                    </span>
-                  </div>
-                </div>
-
-                {/* Right: Score & View Action */}
-                <div className="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-slate-100">
-                  <div className="text-right">
-                    <div
-                      className={`inline-flex items-center justify-center w-12 h-12 rounded-xl font-extrabold text-base border ${interpretation.border} ${interpretation.color} ${interpretation.bg} shadow-2xs`}
-                    >
-                      {item.matchScore}%
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => onSelectAnalysis(item.id)}
+                  className="p-4 sm:px-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-lux-bg transition-colors cursor-pointer group"
+                >
+                  {/* Left: Job Info */}
+                  <div className="space-y-1 min-w-0 flex-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h2 className="text-xs font-semibold text-lux-text truncate group-hover:text-lux-cobalt transition-colors">
+                        {item.jobTitle || 'Target Role'}
+                      </h2>
+                      {isAi ? (
+                        <span className="inline-flex items-center gap-1 text-2xs font-medium px-2 py-0.2 rounded-full bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+                          <Sparkles className="w-2.5 h-2.5 text-lux-cobalt" />
+                          AI
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-2xs font-medium px-2 py-0.2 rounded-full bg-lux-bg text-lux-secondary border border-lux-border">
+                          <Sliders className="w-2.5 h-2.5 text-lux-muted" />
+                          Standard
+                        </span>
+                      )}
                     </div>
-                    <span className="block text-2xs font-bold text-slate-400 mt-0.5 text-center">
-                      {interpretation.label}
-                    </span>
+
+                    <div className="flex items-center gap-2.5 text-2xs text-lux-secondary flex-wrap">
+                      {item.resumeFileName && (
+                        <span className="flex items-center gap-1 truncate text-lux-secondary">
+                          <FileText className="w-3 h-3 flex-shrink-0 text-lux-muted" />
+                          <span className="truncate">{item.resumeFileName}</span>
+                        </span>
+                      )}
+                      <span>&middot;</span>
+                      <span className="flex items-center gap-1 text-lux-muted">
+                        <Clock className="w-3 h-3 text-lux-muted" />
+                        {formatDate(item.createdAt)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-0.5 text-2xs font-medium">
+                      <span className="tabular-nums px-2 py-0.5 rounded bg-lux-success-subtle text-lux-success border border-lux-success-border">
+                        ✓ {item.matchedCount} matched
+                      </span>
+                      <span className="tabular-nums px-2 py-0.5 rounded bg-lux-warning-subtle text-lux-warning border border-lux-warning-border">
+                        ✗ {item.missingCount} gaps
+                      </span>
+                    </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => onSelectAnalysis(item.id)}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-slate-700 bg-slate-50 hover:bg-indigo-600 hover:text-white hover:border-indigo-600 border border-slate-200 transition-all shadow-2xs group"
-                  >
-                    View Analysis
-                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                  </button>
+                  {/* Right: Score & View Action */}
+                  <div className="flex items-center justify-between sm:justify-end gap-3.5 border-t sm:border-t-0 pt-2 sm:pt-0 border-lux-border-subtle flex-shrink-0">
+                    <div className="text-right">
+                      <div className="flex items-baseline justify-end gap-1">
+                        <span className={`tabular-nums text-sm font-bold ${interpretation.color}`}>
+                          {item.matchScore}%
+                        </span>
+                      </div>
+                      <span className="block text-2xs text-lux-muted">
+                        {interpretation.label}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onSelectAnalysis(item.id);
+                      }}
+                      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-md text-2xs font-medium text-lux-secondary bg-lux-surface hover:text-lux-cobalt hover:border-lux-cobalt-border border border-lux-border transition-all shadow-2xs"
+                    >
+                      View
+                      <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

@@ -1,11 +1,41 @@
 import React from 'react';
-import { Target, CheckCircle2, XCircle, Calendar, Briefcase, FileText } from 'lucide-react';
+import { CheckCircle2, XCircle, Calendar, Briefcase } from 'lucide-react';
 
 export const getScoreInterpretation = (score) => {
-  if (score >= 85) return { label: 'Excellent Match', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-500', barBg: 'bg-emerald-500' };
-  if (score >= 70) return { label: 'Good Match', color: 'text-teal-700', bg: 'bg-teal-50', border: 'border-teal-500', barBg: 'bg-teal-500' };
-  if (score >= 40) return { label: 'Moderate Match', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-500', barBg: 'bg-amber-500' };
-  return { label: 'Low Match', color: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-500', barBg: 'bg-rose-500' };
+  if (score >= 85) {
+    return {
+      label: 'High Match',
+      color: 'text-lux-success',
+      bg: 'bg-lux-success-subtle',
+      border: 'border-lux-success-border',
+      stroke: '#0E9F6E',
+    };
+  }
+  if (score >= 70) {
+    return {
+      label: 'Strong Match',
+      color: 'text-lux-cobalt',
+      bg: 'bg-lux-cobalt-subtle',
+      border: 'border-lux-cobalt-border',
+      stroke: '#3659D9',
+    };
+  }
+  if (score >= 40) {
+    return {
+      label: 'Moderate Match',
+      color: 'text-lux-warning',
+      bg: 'bg-lux-warning-subtle',
+      border: 'border-lux-warning-border',
+      stroke: '#D97706',
+    };
+  }
+  return {
+    label: 'Low Match',
+    color: 'text-lux-error',
+    bg: 'bg-lux-error-subtle',
+    border: 'border-lux-error-border',
+    stroke: '#E02424',
+  };
 };
 
 export const formatDate = (isoDate) => {
@@ -30,112 +60,133 @@ export default function ScoreCard({
   createdAt = null,
 }) {
   const interpretation = getScoreInterpretation(matchScore);
+  const totalRequired = matchedCount + missingCount;
+
+  // SVG Circular Ring parameters
+  const size = 56;
+  const strokeWidth = 5;
+  const radius = (size - strokeWidth) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const clampedScore = Math.min(100, Math.max(0, matchScore));
+  const strokeDashoffset = circumference - (clampedScore / 100) * circumference;
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {/* 1. Match Score Card with Progress Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+      {/* 1. Overall Match Score Card with SVG Ring */}
+      <div className="bg-lux-surface rounded-card border border-lux-border p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
         <div className="flex items-center gap-3.5">
-          <div
-            className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center font-black text-lg border flex-shrink-0 shadow-2xs ${interpretation.border} ${interpretation.color} ${interpretation.bg}`}
-          >
-            <span>{matchScore}%</span>
+          <div className="relative flex-shrink-0 flex items-center justify-center">
+            <svg width={size} height={size} className="transform -rotate-90">
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                stroke="#E7E9EE"
+                strokeWidth={strokeWidth}
+                fill="none"
+              />
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                stroke={interpretation.stroke}
+                strokeWidth={strokeWidth}
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                strokeLinecap="round"
+                fill="none"
+                className="transition-all duration-700 ease-out"
+              />
+            </svg>
+            <span className="absolute tabular-nums text-xs font-bold text-lux-text">
+              {matchScore}%
+            </span>
           </div>
-          <div className="min-w-0">
-            <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block">
+
+          <div className="min-w-0 flex-1">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
               Match Score
             </span>
-            <span className={`text-sm font-extrabold block truncate ${interpretation.color}`}>
+            <span className={`text-xs font-semibold block truncate ${interpretation.color}`}>
               {interpretation.label}
             </span>
-            <span className="text-xs text-slate-500 block font-medium">
-              {matchedCount} of {matchedCount + missingCount} skills
+            <span className="text-2xs text-lux-muted block tabular-nums">
+              {matchedCount} of {totalRequired} skills met
             </span>
           </div>
         </div>
 
-        {/* Visual Progress Bar */}
-        <div className="mt-3.5 pt-3 border-t border-slate-100">
-          <div className="w-full bg-slate-100 rounded-full h-2 overflow-hidden">
-            <div
-              className={`h-2 rounded-full transition-all duration-500 ${interpretation.barBg}`}
-              style={{ width: `${Math.min(100, Math.max(0, matchScore))}%` }}
-            />
-          </div>
-          <div className="flex justify-between items-center text-2xs text-slate-400 font-semibold mt-1">
-            <span>0%</span>
-            <span>40% Mod</span>
-            <span>70% Good</span>
-            <span>100%</span>
-          </div>
+        <div className="mt-3 pt-2.5 border-t border-lux-border-subtle flex items-center justify-between text-2xs text-lux-muted">
+          <span>Deterministic evaluation</span>
+          <span className="tabular-nums font-medium text-lux-secondary">{clampedScore}/100</span>
         </div>
       </div>
 
       {/* 2. Skills Matched */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0 border border-emerald-100">
-            <CheckCircle2 className="w-6 h-6" />
+      <div className="bg-lux-surface rounded-card border border-lux-border p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-lux-success-subtle text-lux-success flex items-center justify-center flex-shrink-0 border border-lux-success-border">
+            <CheckCircle2 className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
               Skills Matched
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-2xl font-black text-slate-900 tracking-tight">{matchedCount}</span>
-              <span className="text-xs text-emerald-700 font-bold">verified</span>
+              <span className="tabular-nums text-xl font-bold text-lux-text">{matchedCount}</span>
+              <span className="text-2xs text-lux-success font-medium">verified</span>
             </div>
           </div>
         </div>
-        <div className="mt-3.5 pt-3 border-t border-slate-100 text-xs text-slate-500 font-medium flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-          <span>Present on candidate resume</span>
+        <div className="mt-3 pt-2.5 border-t border-lux-border-subtle text-2xs text-lux-secondary font-medium flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-lux-success" />
+          <span>Present on submitted resume</span>
         </div>
       </div>
 
-      {/* 3. Skills Missing */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center flex-shrink-0 border border-amber-100">
-            <XCircle className="w-6 h-6" />
+      {/* 3. Skill Gaps */}
+      <div className="bg-lux-surface rounded-card border border-lux-border p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-lux-warning-subtle text-lux-warning flex items-center justify-center flex-shrink-0 border border-lux-warning-border">
+            <XCircle className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
               Skill Gaps
             </span>
             <div className="flex items-baseline gap-1.5 mt-0.5">
-              <span className="text-2xl font-black text-slate-900 tracking-tight">{missingCount}</span>
-              <span className="text-xs text-amber-700 font-bold">to learn</span>
+              <span className="tabular-nums text-xl font-bold text-lux-text">{missingCount}</span>
+              <span className="text-2xs text-lux-warning font-medium">to acquire</span>
             </div>
           </div>
         </div>
-        <div className="mt-3.5 pt-3 border-t border-slate-100 text-xs text-slate-500 font-medium flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-          <span>Prioritized in learning roadmap</span>
+        <div className="mt-3 pt-2.5 border-t border-lux-border-subtle text-2xs text-lux-secondary font-medium flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-lux-warning" />
+          <span>Ordered in roadmap milestones</span>
         </div>
       </div>
 
-      {/* 4. Target Role & Date */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-card hover:shadow-card-hover transition-all duration-200 flex flex-col justify-between">
-        <div className="flex items-center gap-3.5">
-          <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0 border border-indigo-100">
-            <Briefcase className="w-6 h-6" />
+      {/* 4. Target Role & Context */}
+      <div className="bg-lux-surface rounded-card border border-lux-border p-4 shadow-card hover:shadow-card-hover transition-all flex flex-col justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center flex-shrink-0 border border-lux-cobalt-border">
+            <Briefcase className="w-5 h-5" />
           </div>
           <div className="min-w-0 flex-1">
-            <span className="text-2xs font-bold uppercase tracking-wider text-slate-500 block">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
               Target Role
             </span>
-            <span className="text-sm font-bold text-slate-900 truncate block mt-0.5">
+            <span className="text-xs font-semibold text-lux-text truncate block mt-0.5" title={jobTitle}>
               {jobTitle}
             </span>
-            <span className="text-xs text-slate-500 truncate block font-medium">
+            <span className="text-2xs text-lux-muted truncate block" title={resumeFileName}>
               {resumeFileName}
             </span>
           </div>
         </div>
-        <div className="mt-3.5 pt-3 border-t border-slate-100 text-xs text-slate-500 font-medium flex items-center gap-1.5">
-          <Calendar className="w-3.5 h-3.5 text-slate-400" />
-          <span>Analyzed {formatDate(createdAt)}</span>
+        <div className="mt-3 pt-2.5 border-t border-lux-border-subtle text-2xs text-lux-secondary font-medium flex items-center gap-1.5">
+          <Calendar className="w-3 h-3 text-lux-muted" />
+          <span>Evaluated {formatDate(createdAt)}</span>
         </div>
       </div>
     </div>

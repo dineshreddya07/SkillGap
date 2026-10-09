@@ -3,104 +3,110 @@ import {
   Sparkles,
   PlusCircle,
   History,
-  FileText,
   Briefcase,
   Layers,
   Map,
   ArrowRight,
+  BarChart3,
+  CheckCircle2,
+  TrendingUp,
 } from 'lucide-react';
-import ScoreCard from './ScoreCard';
+import ScoreCard, { getScoreInterpretation, formatDate } from './ScoreCard';
 import SkillList from './SkillList';
 import CareerInsights from './CareerInsights';
 import RoadmapTimeline from './RoadmapTimeline';
 
 export default function DashboardView({
   currentAnalysis = null,
+  historyList = [],
   onNewAnalysis = () => {},
   onViewHistory = () => {},
+  onSelectAnalysis = () => {},
 }) {
+  // Real metrics computed from application history
+  const totalAnalyses = historyList.length;
+  const avgScore = totalAnalyses > 0
+    ? Math.round(historyList.reduce((acc, curr) => acc + (curr.matchScore || 0), 0) / totalAnalyses)
+    : (currentAnalysis?.matchScore || 0);
+
+  const highestScore = totalAnalyses > 0
+    ? Math.max(...historyList.map((h) => h.matchScore || 0))
+    : (currentAnalysis?.matchScore || 0);
+
   // Empty Dashboard State
-  if (!currentAnalysis) {
+  if (!currentAnalysis && totalAnalyses === 0) {
     return (
-      <div className="space-y-10 max-w-4xl mx-auto py-2">
-        {/* Hero Header */}
-        <div className="text-center max-w-2xl mx-auto pt-4">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200/80 mb-3 shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-600" />
-            AI Career Skill Intelligence
+      <div className="space-y-8 max-w-4xl mx-auto py-4">
+        {/* Clean, calm hero area */}
+        <div className="text-center max-w-xl mx-auto pt-4 space-y-2.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-2xs font-semibold bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+            <Sparkles className="w-2.5 h-2.5 text-lux-cobalt" />
+            Precision Career Intelligence
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900">
-            Intelligent Skill Gap Analysis
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-lux-text">
+            Analyze Resume &amp; Role Fit
           </h1>
-          <p className="mt-2.5 text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Discover the exact technical skills required for your target jobs, evaluate your resume fit with deterministic precision, and receive an AI-guided learning roadmap.
+          <p className="text-xs text-lux-secondary leading-relaxed">
+            Deterministic competency extraction against job requirements with intelligent learning roadmaps.
           </p>
         </div>
 
-        {/* Action Card */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 p-8 sm:p-12 text-center shadow-card hover:shadow-card-hover transition-all duration-200 space-y-6 max-w-xl mx-auto">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-50 to-indigo-100/70 text-indigo-600 flex items-center justify-center mx-auto border border-indigo-200/60 shadow-2xs">
-            <Briefcase className="w-8 h-8" />
+        {/* Action Panel */}
+        <div className="bg-lux-surface rounded-panel border border-lux-border p-8 sm:p-10 text-center shadow-card hover:shadow-card-hover transition-all space-y-5 max-w-md mx-auto">
+          <div className="w-12 h-12 rounded-xl bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center mx-auto border border-lux-cobalt-border shadow-2xs">
+            <Briefcase className="w-6 h-6" />
           </div>
 
-          <div className="space-y-1.5">
-            <h2 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight">
-              No analyses yet
+          <div className="space-y-1">
+            <h2 className="text-sm font-semibold text-lux-text tracking-tight">
+              No analyses created yet
             </h2>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed">
-              Upload your resume and evaluate a target job description to get your first comprehensive skill match report.
+            <p className="text-2xs text-lux-secondary max-w-xs mx-auto leading-relaxed">
+              Upload your resume and evaluate a target job description to generate your first match report.
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
             <button
               type="button"
               onClick={onNewAnalysis}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-sm"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-md text-xs font-medium text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs"
             >
-              <PlusCircle className="w-4 h-4" />
-              Start Your First Analysis
-            </button>
-            <button
-              type="button"
-              onClick={onViewHistory}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/80 transition-colors"
-            >
-              <History className="w-4 h-4" />
-              View History
+              <PlusCircle className="w-3.5 h-3.5" />
+              Create First Analysis
             </button>
           </div>
         </div>
 
         {/* Feature Highlights Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-700 flex items-center justify-center font-bold text-xs border border-emerald-100">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+          <div className="bg-lux-surface p-4 rounded-card border border-lux-border shadow-card space-y-1.5">
+            <div className="w-6 h-6 rounded-md bg-lux-success-subtle text-lux-success flex items-center justify-center font-bold text-2xs border border-lux-success-border">
               ✓
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900">Deterministic Matching</h3>
-            <p className="text-2xs text-slate-500 leading-relaxed">
-              Compares normalized skills across 50+ industry competencies with zero black-box scoring.
+            <h3 className="font-semibold text-xs text-lux-text">Deterministic Matching</h3>
+            <p className="text-2xs text-lux-secondary leading-relaxed">
+              Normalizes technical skills across 50+ core domains with transparent, rule-backed scoring.
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-700 flex items-center justify-center font-bold text-xs border border-indigo-100">
+          <div className="bg-lux-surface p-4 rounded-card border border-lux-border shadow-card space-y-1.5">
+            <div className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center font-bold text-2xs border border-lux-cobalt-border">
               ✨
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900">AI Career Insights</h3>
-            <p className="text-2xs text-slate-500 leading-relaxed">
-              Personalized skill priority matrix and realistic portfolio projects tailored to your target job.
+            <h3 className="font-semibold text-xs text-lux-text">AI Career Insights</h3>
+            <p className="text-2xs text-lux-secondary leading-relaxed">
+              Prioritizes skill gaps by role relevance and generates concrete portfolio project ideas.
             </p>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200/90 shadow-card hover:shadow-card-hover transition-all duration-200 space-y-2">
-            <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-700 flex items-center justify-center font-bold text-xs border border-sky-100">
+          <div className="bg-lux-surface p-4 rounded-card border border-lux-border shadow-card space-y-1.5">
+            <div className="w-6 h-6 rounded-md bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center font-bold text-2xs border border-lux-cobalt-border">
               🗺
             </div>
-            <h3 className="font-bold text-xs sm:text-sm text-slate-900">Intelligent Roadmap</h3>
-            <p className="text-2xs text-slate-500 leading-relaxed">
-              Structured learning milestones ordered by prerequisite foundations, frameworks, and deployment.
+            <h3 className="font-semibold text-xs text-lux-text">Structured Roadmaps</h3>
+            <p className="text-2xs text-lux-secondary leading-relaxed">
+              Step-by-step milestones ordered by prerequisite foundations, frameworks, and deployment.
             </p>
           </div>
         </div>
@@ -108,105 +114,222 @@ export default function DashboardView({
     );
   }
 
-  // Active Dashboard with Current Analysis
-  const roadmapObj = currentAnalysis.roadmap || currentAnalysis.learningRoadmap || {};
+  // Active Dashboard with Current Analysis or computed history
+  const roadmapObj = currentAnalysis?.roadmap || currentAnalysis?.learningRoadmap || {};
   const roadmapSteps = roadmapObj.steps || (Array.isArray(roadmapObj) ? roadmapObj : []);
   const roadmapMessage = roadmapObj.message || roadmapObj.summary || '';
-  const source = currentAnalysis.source || roadmapObj.source || 'fallback';
-  const skillPriorities = currentAnalysis.skillPriorities || roadmapObj.skillPriorities || [];
-  const recommendations = currentAnalysis.recommendations || [];
+  const source = currentAnalysis?.source || roadmapObj.source || 'fallback';
+  const skillPriorities = currentAnalysis?.skillPriorities || roadmapObj.skillPriorities || [];
+  const recommendations = currentAnalysis?.recommendations || [];
 
-  const matchedList = currentAnalysis.matchedSkills || currentAnalysis.matchingSkills || [];
-  const missingList = currentAnalysis.missingSkills || [];
+  const matchedList = currentAnalysis?.matchedSkills || currentAnalysis?.matchingSkills || [];
+  const missingList = currentAnalysis?.missingSkills || [];
 
   return (
-    <div className="space-y-8">
-      {/* Dashboard Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-200/80">
+    <div className="space-y-6">
+      {/* ── Page Header ── */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-lux-border">
         <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-slate-900">
-              Latest Analysis Dashboard
+          <div className="flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-lux-text">
+              Workspace Dashboard
             </h1>
-            <span className="text-2xs font-bold px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 shadow-2xs">
-              Active Analysis
+            <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border">
+              Active Evaluation
             </span>
           </div>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Overview of your current resume evaluation against <span className="font-semibold text-slate-700">{currentAnalysis.jobTitle || 'the target job'}</span>.
+          <p className="text-2xs text-lux-secondary mt-0.5">
+            Resume evaluation overview for <span className="font-medium text-lux-text">{currentAnalysis?.jobTitle || 'Target Position'}</span>.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={onViewHistory}
-            className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all shadow-2xs"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md border border-lux-border bg-lux-surface text-lux-secondary hover:text-lux-text hover:bg-lux-bg transition-colors shadow-2xs"
           >
-            <History className="w-3.5 h-3.5 text-slate-500" />
-            History
+            <History className="w-3.5 h-3.5 text-lux-muted" />
+            History ({totalAnalyses})
           </button>
           <button
             type="button"
             onClick={onNewAnalysis}
-            className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-bold rounded-xl text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 transition-colors shadow-sm"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium rounded-md text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs"
           >
-            <PlusCircle className="w-4 h-4" />
-            + New Analysis
+            <PlusCircle className="w-3.5 h-3.5" />
+            New Analysis
           </button>
         </div>
       </div>
 
-      {/* 4 Summary Score Cards */}
-      <ScoreCard
-        matchScore={currentAnalysis.matchScore || 0}
-        matchedCount={matchedList.length}
-        missingCount={missingList.length}
-        jobTitle={currentAnalysis.jobTitle || 'Target Role'}
-        resumeFileName={currentAnalysis.resumeFileName || 'Uploaded Resume'}
-        createdAt={currentAnalysis.savedAt || currentAnalysis.createdAt}
-      />
+      {/* ── Real Metric Summary Cards ── */}
+      {totalAnalyses > 0 && (
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="bg-lux-surface p-3.5 rounded-card border border-lux-border shadow-card">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
+              Total Analyses
+            </span>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="tabular-nums text-xl font-bold text-lux-text">{totalAnalyses}</span>
+              <span className="text-2xs text-lux-muted">evaluations</span>
+            </div>
+          </div>
 
-      {/* Skill Overview: Matched vs Missing */}
-      <section className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Layers className="w-4 h-4 text-indigo-600" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">Skill Breakdown</h2>
-        </div>
-        <SkillList
-          matchingSkills={matchedList}
-          missingSkills={missingList}
-          additionalSkills={currentAnalysis.additionalSkills || []}
-        />
-      </section>
+          <div className="bg-lux-surface p-3.5 rounded-card border border-lux-border shadow-card">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
+              Average Score
+            </span>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="tabular-nums text-xl font-bold text-lux-cobalt">{avgScore}%</span>
+              <span className="text-2xs text-lux-muted">across roles</span>
+            </div>
+          </div>
 
-      {/* AI Career Insights */}
-      <section className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-indigo-600" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">Career Insights &amp; Priorities</h2>
-        </div>
-        <CareerInsights
-          summary={currentAnalysis.summary || roadmapObj.summary || ''}
-          skillPriorities={skillPriorities}
-          recommendations={recommendations}
-          source={source}
-        />
-      </section>
+          <div className="bg-lux-surface p-3.5 rounded-card border border-lux-border shadow-card">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
+              Highest Fit
+            </span>
+            <div className="flex items-baseline gap-1 mt-1">
+              <span className="tabular-nums text-xl font-bold text-lux-success">{highestScore}%</span>
+              <span className="text-2xs text-lux-muted">best match</span>
+            </div>
+          </div>
 
-      {/* Learning Roadmap Vertical Timeline */}
-      <section className="space-y-3">
-        <div className="flex items-center gap-2">
-          <Map className="w-4 h-4 text-indigo-600" />
-          <h2 className="text-sm font-bold uppercase tracking-wider text-slate-700">Milestone Roadmap</h2>
+          <div className="bg-lux-surface p-3.5 rounded-card border border-lux-border shadow-card">
+            <span className="text-2xs font-medium uppercase tracking-wider text-lux-secondary block">
+              Latest Target
+            </span>
+            <div className="mt-1">
+              <span className="text-xs font-semibold text-lux-text truncate block" title={currentAnalysis?.jobTitle}>
+                {currentAnalysis?.jobTitle || 'Role'}
+              </span>
+            </div>
+          </div>
         </div>
-        <RoadmapTimeline
-          roadmap={{
-            message: roadmapMessage,
-            steps: roadmapSteps,
-          }}
-        />
-      </section>
+      )}
+
+      {/* ── Active Analysis Results ── */}
+      {currentAnalysis && (
+        <>
+          {/* 4 Summary Score Cards */}
+          <ScoreCard
+            matchScore={currentAnalysis.matchScore || 0}
+            matchedCount={matchedList.length}
+            missingCount={missingList.length}
+            jobTitle={currentAnalysis.jobTitle || 'Target Role'}
+            resumeFileName={currentAnalysis.resumeFileName || 'Uploaded Resume'}
+            createdAt={currentAnalysis.savedAt || currentAnalysis.createdAt}
+          />
+
+          {/* Skill Overview: Matched vs Missing */}
+          <section className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Layers className="w-3.5 h-3.5 text-lux-cobalt" />
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Competency Breakdown</h2>
+            </div>
+            <SkillList
+              matchingSkills={matchedList}
+              missingSkills={missingList}
+              additionalSkills={currentAnalysis.additionalSkills || []}
+            />
+          </section>
+
+          {/* AI Career Insights */}
+          <section className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-3.5 h-3.5 text-lux-cobalt" />
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Career Insights &amp; Priorities</h2>
+            </div>
+            <CareerInsights
+              summary={currentAnalysis.summary || roadmapObj.summary || ''}
+              skillPriorities={skillPriorities}
+              recommendations={recommendations}
+              source={source}
+            />
+          </section>
+
+          {/* Learning Roadmap Vertical Timeline */}
+          <section className="space-y-2">
+            <div className="flex items-center gap-2">
+              <Map className="w-3.5 h-3.5 text-lux-cobalt" />
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">Milestone Learning Path</h2>
+            </div>
+            <RoadmapTimeline
+              roadmap={{
+                message: roadmapMessage,
+                steps: roadmapSteps,
+              }}
+            />
+          </section>
+        </>
+      )}
+
+      {/* ── Recent Analyses Table ── */}
+      {historyList.length > 0 && (
+        <section className="space-y-2 pt-2">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <History className="w-3.5 h-3.5 text-lux-cobalt" />
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-lux-secondary">
+                Recent Evaluations
+              </h2>
+            </div>
+            <button
+              type="button"
+              onClick={onViewHistory}
+              className="text-2xs font-medium text-lux-cobalt hover:underline inline-flex items-center gap-1"
+            >
+              View all ({historyList.length}) &rarr;
+            </button>
+          </div>
+
+          <div className="bg-lux-surface rounded-card border border-lux-border shadow-card overflow-hidden">
+            <div className="divide-y divide-lux-border-subtle">
+              {historyList.slice(0, 4).map((item) => {
+                const interpretation = getScoreInterpretation(item.matchScore);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => onSelectAnalysis(item.id)}
+                    className="p-3.5 sm:px-4 flex items-center justify-between gap-3 hover:bg-lux-bg transition-colors cursor-pointer group"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-semibold text-lux-text truncate group-hover:text-lux-cobalt transition-colors">
+                          {item.jobTitle || 'Target Role'}
+                        </span>
+                        {item.source === 'ai' && (
+                          <span className="text-2xs px-1.5 py-0.2 rounded bg-lux-cobalt-subtle text-lux-cobalt border border-lux-cobalt-border font-medium">
+                            AI
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-2xs text-lux-muted mt-0.5">
+                        <span className="truncate">{item.resumeFileName || 'Resume'}</span>
+                        <span>&middot;</span>
+                        <span>{formatDate(item.createdAt)}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <div className="text-right">
+                        <span className={`tabular-nums text-xs font-bold ${interpretation.color}`}>
+                          {item.matchScore}%
+                        </span>
+                        <span className="block text-2xs text-lux-muted">
+                          {interpretation.label}
+                        </span>
+                      </div>
+                      <ArrowRight className="w-3.5 h-3.5 text-lux-muted group-hover:text-lux-cobalt group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
