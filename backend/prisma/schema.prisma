@@ -10,8 +10,9 @@ generator client {
 model User {
   id        String     @id @default(uuid())
   name      String?
-  email     String     @unique
-  analyses  Analysis[]
+  email        String     @unique
+  passwordHash String?
+  analyses     Analysis[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 
