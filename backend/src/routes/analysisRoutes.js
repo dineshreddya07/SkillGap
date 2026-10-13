@@ -4,6 +4,7 @@ const { extractSkills } = require('../utils/skillExtractor');
 const { calculateSkillMatch } = require('../services/matchingEngineService');
 const { generateCareerAnalysis } = require('../services/aiService');
 const prisma = require('../lib/prisma');
+const { requireAuth } = require('../middleware/authMiddleware');
 
 // Helper to deduplicate array items
 const uniqueArray = (arr) => [...new Set((arr || []).filter(item => typeof item === 'string' && item.trim().length > 0))];
@@ -136,7 +137,7 @@ router.post('/ai', async (req, res) => {
 // POST /api/analysis/complete
 // Full pipeline: match + AI enhancement (with fallback) + save to DB
 // ---------------------------------------------------------------------------
-router.post('/complete', async (req, res) => {
+router.post('/complete', requireAuth, async (req, res) => {
   try {
     const rawPayload = JSON.stringify(req.body || {});
     if (rawPayload.length > 100000) {
@@ -197,9 +198,10 @@ router.post('/complete', async (req, res) => {
 
     const aiData = careerAnalysis.data;
 
-    // Step 3: Save to database using existing Analysis model
+    // Step 3: Save to database using existing Analysis model scoped to the authenticated user
     const saved = await prisma.analysis.create({
       data: {
+        userId: req.user.id,
         resumeFileName: resumeFileName || null,
         jobTitle: jobTitle || null,
         jobDescription: jobDescription.trim(),
@@ -248,11 +250,12 @@ router.post('/complete', async (req, res) => {
 
 // ---------------------------------------------------------------------------
 // GET /api/analysis/history
-// Return the 20 most recent analyses (summary cards)
+// Return the 20 most recent analyses (summary cards) belonging to the current user
 // ---------------------------------------------------------------------------
-router.get('/history', async (req, res) => {
+router.get('/history', requireAuth, async (req, res) => {
   try {
     const analyses = await prisma.analysis.findMany({
+      where: { userId: req.user.id },
       orderBy: { createdAt: 'desc' },
       take: 20,
       select: {
@@ -299,14 +302,17 @@ router.get('/history', async (req, res) => {
 
 // ---------------------------------------------------------------------------
 // GET /api/analysis/:id
-// Return full details of a single saved analysis
+// Return full details of a single saved analysis belonging to the current user
 // ---------------------------------------------------------------------------
-router.get('/:id', async (req, res) => {
+router.get('/:id', requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
-    const analysis = await prisma.analysis.findUnique({
-      where: { id },
+    const analysis = await prisma.analysis.findFirst({
+      where: {
+        id,
+        userId: req.user.id,
+      },
     });
 
     if (!analysis) {

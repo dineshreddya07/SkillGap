@@ -6,6 +6,7 @@ const healthRouter = require('./routes/health');
 const resumeRouter = require('./routes/resumeRoutes');
 const jobRouter = require('./routes/jobRoutes');
 const analysisRouter = require('./routes/analysisRoutes');
+const authRouter = require('./routes/authRoutes');
 const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/health', healthRouter);
+app.use('/api/auth', authRouter);
 app.use('/api/resume', resumeRouter);
 app.use('/api/job-description', jobRouter);
 app.use('/api/analysis', analysisRouter);

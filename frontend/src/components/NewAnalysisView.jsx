@@ -19,8 +19,11 @@ import {
   matchSkills,
   saveCompleteAnalysis,
 } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 
-export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
+export default function NewAnalysisView({ onAnalysisComplete = () => {}, onOpenAuth = () => {} }) {
+  const { isAuthenticated } = useAuth();
+
   // Resume upload state
   const [file, setFile] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -140,6 +143,13 @@ export default function NewAnalysisView({ onAnalysisComplete = () => {} }) {
   // Run AI Career Guidance and Save
   const handleSaveAndAnalyze = async () => {
     if (!matchResult || !jobDescription) return;
+
+    if (!isAuthenticated) {
+      setSaveError('Please sign in or create an account to save your evaluation.');
+      onOpenAuth();
+      return;
+    }
+
     setIsSaving(true);
     setSaveError(null);
 

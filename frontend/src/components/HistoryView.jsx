@@ -17,10 +17,56 @@ export default function HistoryView({
   history = [],
   isLoading = false,
   error = null,
+  isAuthenticated = false,
+  onOpenAuth = () => {},
   onRefresh = () => {},
   onSelectAnalysis = () => {},
   onNewAnalysis = () => {},
 }) {
+  if (!isAuthenticated) {
+    return (
+      <div className="space-y-5">
+        <div className="pb-3 border-b border-lux-border">
+          <div className="flex items-center gap-2">
+            <h1 className="text-base sm:text-lg font-semibold tracking-tight text-lux-text">
+              Analysis History
+            </h1>
+          </div>
+          <p className="text-2xs text-lux-secondary mt-0.5">
+            Your personal archive of resume evaluations and AI learning roadmaps.
+          </p>
+        </div>
+
+        <div className="bg-lux-surface rounded-panel border border-lux-border p-10 text-center shadow-card space-y-4 max-w-md mx-auto">
+          <div className="w-12 h-12 rounded-xl bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center mx-auto border border-lux-cobalt-border shadow-2xs">
+            <History className="w-6 h-6" />
+          </div>
+          <div className="space-y-1.5">
+            <h2 className="text-sm font-semibold text-lux-text">Sign in to view your history</h2>
+            <p className="text-2xs text-lux-secondary leading-relaxed">
+              Create an account or sign in to save your evaluations, track skill progression, and access your personal learning roadmaps anytime.
+            </p>
+          </div>
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5">
+            <button
+              type="button"
+              onClick={onOpenAuth}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md text-xs font-medium text-white bg-lux-cobalt hover:bg-lux-cobalt-hover transition-colors shadow-2xs"
+            >
+              Sign In or Register
+            </button>
+            <button
+              type="button"
+              onClick={onNewAnalysis}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md text-xs font-medium text-lux-secondary bg-lux-surface hover:text-lux-text border border-lux-border hover:bg-lux-bg transition-colors shadow-2xs"
+            >
+              Try Analysis as Guest
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
   return (
     <div className="space-y-5">
       {/* Page Header */}

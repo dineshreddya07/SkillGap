@@ -7,17 +7,28 @@ import {
   Sparkles,
   Menu,
   X,
+  LogIn,
+  LogOut,
+  User as UserIcon,
 } from 'lucide-react';
 import { checkHealth, fetchHistory, fetchAnalysisById } from './services/api';
+import { useAuth } from './context/AuthContext';
 import DashboardView from './components/DashboardView';
 import NewAnalysisView from './components/NewAnalysisView';
 import HistoryView from './components/HistoryView';
 import AnalysisDetailView from './components/AnalysisDetailView';
+import AuthModal from './components/AuthModal';
 
 export default function App() {
+  const { user, isAuthenticated, logout } = useAuth();
+
   // Navigation tabs: 'dashboard' | 'new' | 'history' | 'detail'
   const [activeTab, setActiveTab] = useState('dashboard');
   const [selectedAnalysisId, setSelectedAnalysisId] = useState(null);
+
+  // Auth modal state
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState('login');
 
   // Data states
   const [currentAnalysis, setCurrentAnalysis] = useState(null);
@@ -29,24 +40,33 @@ export default function App() {
   const [health, setHealth] = useState({ backend: null, database: null });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Initial load
+  // Initial load: Check health
   useEffect(() => {
-    async function init() {
-      // 1. Health check
+    async function initHealth() {
       try {
         const res = await checkHealth();
         if (res && res.success) setHealth(res.data);
       } catch (err) {
         console.error('Health check failed:', err);
       }
-
-      // 2. Load History & initial current analysis
-      loadHistoryList(true);
     }
-    init();
+    initHealth();
   }, []);
 
+  // When authentication status changes, load or clear history
+  useEffect(() => {
+    if (isAuthenticated) {
+      loadHistoryList(true);
+    } else {
+      setHistory([]);
+      setCurrentAnalysis(null);
+      setIsLoadingHistory(false);
+      setHistoryError(null);
+    }
+  }, [isAuthenticated]);
+
   const loadHistoryList = async (autoSetLatest = false) => {
+    if (!isAuthenticated) return;
     setIsLoadingHistory(true);
     setHistoryError(null);
     try {
@@ -88,6 +108,11 @@ export default function App() {
     setActiveTab('detail');
   };
 
+  const openAuth = (mode = 'login') => {
+    setAuthModalMode(mode);
+    setAuthModalOpen(true);
+  };
+
   return (
     <div className="min-h-screen bg-lux-bg text-lux-text flex flex-col font-sans selection:bg-lux-cobalt-subtle selection:text-lux-cobalt">
       {/* ── Top Navigation Bar: Linear / Stripe luxury standard ── */}
@@ -110,7 +135,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Desktop Navigation Links — calm, confident segmented control */}
+          {/* Desktop Navigation Links */}
           <nav className="hidden md:flex items-center gap-0.5 bg-lux-bg p-1 rounded-lg border border-lux-border shadow-2xs">
             <button
               type="button"
@@ -149,7 +174,7 @@ export default function App() {
             >
               <History className="w-3.5 h-3.5" />
               History
-              {history.length > 0 && (
+              {isAuthenticated && history.length > 0 && (
                 <span className="tabular-nums px-1.5 py-0.2 rounded-full text-2xs bg-lux-border text-lux-secondary font-medium">
                   {history.length}
                 </span>
@@ -157,8 +182,8 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Right Actions: System Health & Mobile Toggle */}
-          <div className="flex items-center gap-3">
+          {/* Right Actions: System Health & Auth Control */}
+          <div className="flex items-center gap-2.5">
             <div className="hidden lg:flex items-center gap-2 text-2xs font-medium text-lux-secondary">
               <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-lux-surface border border-lux-border shadow-2xs">
                 <span
@@ -178,6 +203,36 @@ export default function App() {
                 <span className="text-lux-secondary">Neon DB</span>
               </div>
             </div>
+
+            {/* User Auth Action Pill */}
+            {isAuthenticated ? (
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-lux-surface border border-lux-border text-2xs text-lux-text font-medium shadow-2xs">
+                  <div className="w-4 h-4 rounded-full bg-lux-cobalt-subtle text-lux-cobalt flex items-center justify-center font-bold text-3xs">
+                    {(user?.name || user?.email || 'U')[0].toUpperCase()}
+                  </div>
+                  <span className="max-w-[120px] truncate">{user?.name || user?.email}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={logout}
+                  title="Sign out"
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-lux-border bg-lux-surface text-lux-secondary hover:text-lux-error hover:border-lux-error-border text-xs font-medium transition-colors shadow-2xs"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuth('login')}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-white bg-lux-cobalt hover:bg-lux-cobalt-hover active:bg-lux-cobalt-active transition-colors shadow-2xs"
+              >
+                <LogIn className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </button>
+            )}
 
             {/* Mobile Hamburger Button */}
             <button
@@ -225,9 +280,11 @@ export default function App() {
                 <History className="w-4 h-4" />
                 Analysis History
               </span>
-              <span className="tabular-nums px-2 py-0.5 rounded-full text-2xs bg-lux-border text-lux-secondary">
-                {history.length}
-              </span>
+              {isAuthenticated && history.length > 0 && (
+                <span className="tabular-nums px-2 py-0.5 rounded-full text-2xs bg-lux-border text-lux-secondary">
+                  {history.length}
+                </span>
+              )}
             </button>
           </div>
         )}
@@ -248,6 +305,7 @@ export default function App() {
         {activeTab === 'new' && (
           <NewAnalysisView
             onAnalysisComplete={handleAnalysisComplete}
+            onOpenAuth={() => openAuth('signup')}
           />
         )}
 
@@ -256,6 +314,8 @@ export default function App() {
             history={history}
             isLoading={isLoadingHistory}
             error={historyError}
+            isAuthenticated={isAuthenticated}
+            onOpenAuth={() => openAuth('login')}
             onRefresh={() => loadHistoryList(false)}
             onSelectAnalysis={handleSelectAnalysis}
             onNewAnalysis={() => setActiveTab('new')}
@@ -282,6 +342,17 @@ export default function App() {
           </p>
         </div>
       </footer>
+
+      {/* ── Authentication Modal ── */}
+      <AuthModal
+        isOpen={authModalOpen}
+        initialMode={authModalMode}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={() => {
+          setAuthModalOpen(false);
+          loadHistoryList(false);
+        }}
+      />
     </div>
   );
 }

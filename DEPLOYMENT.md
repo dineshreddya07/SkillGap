@@ -63,10 +63,16 @@ npx prisma migrate deploy
 | `NODE_ENV` | `production` |
 | `PORT` | `10000` (Render's default; or leave for Render to assign) |
 | `DATABASE_URL` | Your Neon connection string (with `?sslmode=require`) |
+| `JWT_SECRET` | A securely generated, random secret string (e.g. 32+ characters) |
 | `FRONTEND_URL` | Your Vercel frontend URL — set this after deploying the frontend |
 | `AI_PROVIDER` | `gemini` or `openai` (optional — falls back to deterministic if unset) |
 | `AI_API_KEY` | Your AI provider API key (optional — leave empty for deterministic fallback) |
 | `AI_MODEL` | `gemini-1.5-flash` or equivalent (optional) |
+
+> ⚠️ **JWT_SECRET Security:**
+> - `JWT_SECRET` must be a cryptographically strong, randomly generated secret string.
+> - Keep it strictly private; **never commit it to Git** or share it publicly.
+> - Note that modifying or rotating `JWT_SECRET` immediately invalidates all active JWT tokens, requiring users to log in again.
 
 > ⚠️ Set `FRONTEND_URL` to the exact Vercel URL (e.g., `https://skillgap.vercel.app`) with **no trailing slash**. This is required for CORS.
 
@@ -181,6 +187,7 @@ npm run dev
 PORT=5000
 FRONTEND_URL=http://localhost:5173
 DATABASE_URL=postgresql://username:password@host/neondb?sslmode=require
+JWT_SECRET=your_jwt_secret_here
 AI_PROVIDER=gemini
 AI_API_KEY=your_ai_api_key_here
 AI_MODEL=gemini-1.5-flash
